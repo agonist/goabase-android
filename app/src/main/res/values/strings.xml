@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PsyAround</string>
+
+    <plurals name="numberOfParties">
+        <item quantity="one">%d party</item>
+        <item quantity="other">%d parties</item>
+    </plurals>
+
+</resources>
