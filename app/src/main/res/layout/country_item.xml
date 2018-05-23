@@ -24,8 +24,9 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"
-            android:orientation="horizontal" app:layout_constraintBottom_toBottomOf="parent">
+            android:alpha="0.5"
+            android:background="@android:color/darker_gray" android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent">
         </LinearLayout>
         <TextView
             android:id="@+id/party_count"

@@ -1,12 +1,10 @@
 package com.onionsquare.psyaround.feature.parties
 
-import android.content.Intent
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.facebook.drawee.view.SimpleDraweeView
@@ -37,7 +35,6 @@ class PartiesAdapter(val items: List<Party>, val listener: PartyClickListener) :
         val partyDate = itemView.findViewById<TextView>(R.id.party_date)
         val partyCountry = itemView.findViewById<TextView>(R.id.party_country)
         val partyFlag = itemView.findViewById<ImageView>(R.id.party_country_flag)
-        val openMap = itemView.findViewById<Button>(R.id.open_map)
 
         fun bind(party: Party) {
             partyName.text = party.nameParty
@@ -51,12 +48,12 @@ class PartiesAdapter(val items: List<Party>, val listener: PartyClickListener) :
                 val uri = Uri.parse(it)
                 partyPicture.setImageURI(uri)
             }
-            openMap.setOnClickListener {
-                val gmmIntentUri = Uri.parse("geo:${party.geoLat},${party.geoLon}")
-                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-                mapIntent.`package` = "com.google.android.apps.maps"
-                itemView.context.startActivity(mapIntent)
-            }
+//            openMap.setOnClickListener {
+//                val gmmIntentUri = Uri.parse("geo:${party.geoLat},${party.geoLon}")
+//                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+//                mapIntent.`package` = "com.google.android.apps.maps"
+//                itemView.context.startActivity(mapIntent)
+//            }
         }
     }
 
