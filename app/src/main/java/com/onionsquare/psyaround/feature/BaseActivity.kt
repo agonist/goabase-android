@@ -12,7 +12,6 @@ abstract class BaseActivity : AppCompatActivity() {
         val toolbar = provideToolbar()
         toolbar.title = provideToolbarTitle()
         setSupportActionBar(toolbar)
-
     }
 
     abstract fun provideToolbarTitle(): String
@@ -20,5 +19,9 @@ abstract class BaseActivity : AppCompatActivity() {
     abstract fun provideLayout(): Int
 
     abstract fun provideToolbar() : Toolbar
+
+    fun displayBackArrow(display: Boolean) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(display)
+    }
 
 }

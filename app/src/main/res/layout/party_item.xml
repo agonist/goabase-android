@@ -3,13 +3,11 @@
                                     xmlns:app="http://schemas.android.com/apk/res-auto"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginBottom="10dp"
-                                    android:layout_marginEnd="10dp"
-                                    android:layout_marginStart="10dp"
-                                    android:layout_marginTop="45dp"
+                                    android:layout_marginEnd="16dp"
+                                    android:layout_marginStart="16dp"
                                     android:background="@color/colorPrimaryLight"
-                                    app:cardElevation="0dp"
-                                    android:elevation="0dp">
+                                    android:elevation="0dp"
+                                    app:cardElevation="0dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -28,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:layout_marginStart="8dp"
             android:layout_marginTop="8dp" android:text="TextView"
-            android:textColor="@color/colorTextYellow"
+            android:textColor="@color/flashyYellow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/party_picture"/>
         <TextView
@@ -37,7 +35,7 @@
             android:layout_height="wrap_content" android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp" android:layout_marginTop="8dp"
             android:text="TextView"
-            android:textColor="@color/colorText"
+            android:textColor="@color/flashyGreen"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,16 +47,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp" android:text="TextView"
-            android:textColor="@color/colorText"
-            app:layout_constraintStart_toEndOf="@+id/party_country_flag"
+            android:textColor="@color/flashyGreen"
+            app:layout_constraintStart_toEndOf="@+id/party_location_icon"
             app:layout_constraintTop_toBottomOf="@+id/party_name"/>
 
         <ImageView
-            android:id="@+id/party_country_flag"
+            android:id="@+id/party_location_icon"
             android:layout_width="wrap_content" android:layout_height="20dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp" android:adjustViewBounds="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/party_name" app:srcCompat="@mipmap/am_flag"/>
+            app:layout_constraintTop_toBottomOf="@+id/party_name" app:srcCompat="@drawable/ic_place_black_24dp"/>
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

@@ -3,7 +3,6 @@
     <color name="colorPrimary">#3b3b3b</color>
     <color name="colorPrimaryDark">#151515</color>
     <color name="colorPrimaryLight">#656565</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="colorText">#75fa61</color>
-    <color name="colorTextYellow">#FFFF00</color>
+    <color name="flashyGreen">#75fa61</color>
+    <color name="flashyYellow">#FFFF00</color>
 </resources>

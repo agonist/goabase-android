@@ -28,6 +28,7 @@ class CountriesActivity : BaseActivity(), CountriesView {
             override fun onClick(country: Country) {
                 val intent = Intent(this@CountriesActivity, PartiesActivity::class.java)
                 intent.putExtra("COUNTRY_NAME", country.nameCountry)
+                intent.putExtra("COUNTRY_ISO", country.isoCountry)
                 startActivity(intent)
             }
         })
