@@ -3,6 +3,7 @@ package com.onionsquare.psyaround.feature
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 
 abstract class BaseActivity : AppCompatActivity() {
 
@@ -10,18 +11,29 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(provideLayout())
         val toolbar = provideToolbar()
-        toolbar.title = provideToolbarTitle()
-        setSupportActionBar(toolbar)
+        toolbar?.let {
+            toolbar.title = provideToolbarTitle()
+            setSupportActionBar(toolbar)
+        }
     }
 
     abstract fun provideToolbarTitle(): String
 
     abstract fun provideLayout(): Int
 
-    abstract fun provideToolbar() : Toolbar
+    abstract fun provideToolbar() : Toolbar?
 
     fun displayBackArrow(display: Boolean) {
         supportActionBar?.setDisplayHomeAsUpEnabled(display)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

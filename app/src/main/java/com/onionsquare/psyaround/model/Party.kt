@@ -69,5 +69,21 @@ data class Party(
         val urlPartyHtml: String,
 
         @SerializedName("urlPartyJson")
-        val urlPartyJson: String
+        val urlPartyJson: String,
+
+        @SerializedName("textLineUp")
+        val textLineup: String,
+
+        @SerializedName("textDeco")
+        val textDeco: String,
+
+        @SerializedName("textLocation")
+        val textLocation: String,
+
+        @SerializedName("textEntryFee")
+        val textEntryFee: String,
+
+        @SerializedName("textMore")
+        val textMore: String
+
 )

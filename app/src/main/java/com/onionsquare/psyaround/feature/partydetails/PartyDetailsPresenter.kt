@@ -11,7 +11,7 @@ class PartyDetailsPresenter(val view: PartyDetailsView, val api: GoaBaseApi) {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-
+                    view.showPartyDetails(it.party)
                 }, {})
     }
 
