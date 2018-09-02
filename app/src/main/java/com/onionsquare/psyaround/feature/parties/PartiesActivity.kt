@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.view.View
 import com.heetch.countrypicker.Utils
 import com.onionsquare.psyaround.PsyApp
 import com.onionsquare.psyaround.R
@@ -17,6 +18,8 @@ import kotlinx.android.synthetic.main.parties.*
 
 class PartiesActivity : BaseActivity(), PartiesView {
 
+    var presenter: PartiesPresenter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,7 +28,13 @@ class PartiesActivity : BaseActivity(), PartiesView {
         parties_recycler.layoutManager = layoutManager
         val country = intent.getStringExtra("COUNTRY_NAME")
         displayBackArrow(true)
-        PartiesPresenter(this, PsyApp.instance.api).init(country)
+        presenter = PartiesPresenter(this, PsyApp.instance.api)
+        presenter?.init(country)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter?.end()
     }
 
     override fun showParties(parties: List<Party>) {
@@ -45,6 +54,16 @@ class PartiesActivity : BaseActivity(), PartiesView {
             }
         })
 
+    }
+
+    override fun showLoader() {
+        parties_progress.visibility = View.VISIBLE
+        parties_recycler.visibility = View.GONE
+    }
+
+    override fun hideLoader() {
+        parties_progress.visibility = View.GONE
+        parties_recycler.visibility = View.VISIBLE
     }
 
     override fun provideLayout(): Int = R.layout.parties

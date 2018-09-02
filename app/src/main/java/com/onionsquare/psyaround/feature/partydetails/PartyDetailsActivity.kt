@@ -1,9 +1,11 @@
 package com.onionsquare.psyaround.feature.partydetails
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.text.util.Linkify
+import android.view.View
 import com.onionsquare.psyaround.PsyApp
 import com.onionsquare.psyaround.R
 import com.onionsquare.psyaround.feature.BaseActivity
@@ -28,7 +30,7 @@ class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
         print("")
 
         party.apply {
-            urlImageMedium?.let {
+            urlImageFull?.let {
                 val uri = Uri.parse(it)
                 party_picture.setImageURI(uri)
             }
@@ -38,16 +40,33 @@ class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
             val dateEnd = OffsetDateTime.parse(dateEnd).toLocalDateTime()
             party_date.text = "${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateStart)} - ${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateEnd)}"
             party_location.text = textLocation
+            party_location.setOnClickListener {
+                val gmmIntentUri = Uri.parse("geo:${party.geoLat},${party.geoLon}")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.`package` = "com.google.android.apps.maps"
+                startActivity(mapIntent)
+            }
+
             party_lineup.text = textLineup
             Linkify.addLinks(party_lineup, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
 
             party_info.text = textMore
-            party_deco.text= textDeco
+            party_deco.text = textDeco
             party_fee.text = textEntryFee
             party_organizer.text = "${nameOrganizer}\n${urlOrganizer}"
             Linkify.addLinks(party_organizer, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
         }
 
+    }
+
+    override fun showLoader() {
+        details_progress.visibility = View.VISIBLE
+        details_container.visibility = View.GONE
+    }
+
+    override fun hideLoader() {
+        details_progress.visibility = View.GONE
+        details_container.visibility = View.VISIBLE
     }
 
 

@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.header.view.*
 
 class CountriesActivity : BaseActivity(), CountriesView {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,6 +41,17 @@ class CountriesActivity : BaseActivity(), CountriesView {
         })
         countries_recycler.adapter = adapter
     }
+
+    override fun showLoader() {
+        country_progress.visibility = View.VISIBLE
+        countries_recycler.visibility = View.GONE
+    }
+
+    override fun hideLoader() {
+        country_progress.visibility = View.GONE
+        countries_recycler.visibility = View.VISIBLE
+    }
+
 
     override fun provideToolbarTitle(): String = ""
 

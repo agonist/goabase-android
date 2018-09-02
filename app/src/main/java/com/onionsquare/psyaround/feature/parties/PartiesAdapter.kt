@@ -45,12 +45,7 @@ class PartiesAdapter(val items: List<Party>, val listener: PartyClickListener) :
                 val uri = Uri.parse(it)
                 partyPicture.setImageURI(uri)
             }
-//            openMap.setOnClickListener {
-//                val gmmIntentUri = Uri.parse("geo:${party.geoLat},${party.geoLon}")
-//                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-//                mapIntent.`package` = "com.google.android.apps.maps"
-//                itemView.context.startActivity(mapIntent)
-//            }
+
             itemView.setOnClickListener {
                 listener.onClick(party)
             }

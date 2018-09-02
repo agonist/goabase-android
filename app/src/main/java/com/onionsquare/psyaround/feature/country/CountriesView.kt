@@ -6,4 +6,8 @@ interface CountriesView {
 
     fun showCountries(countries: List<Country>)
 
+    fun showLoader()
+
+    fun hideLoader()
+
 }

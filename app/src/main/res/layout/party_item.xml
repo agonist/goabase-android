@@ -15,12 +15,13 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/party_picture"
-            android:layout_width="match_parent" android:layout_height="100dp"
+            android:layout_width="match_parent" android:layout_height="150dp"
             app:actualImageScaleType="centerCrop"
+            app:placeholderImageScaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:placeholderImage="@drawable/ic_launcher_background"/>
+            app:placeholderImage="@drawable/rick"/>
         <TextView
             android:id="@+id/party_date"
             android:layout_width="wrap_content"

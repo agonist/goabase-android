@@ -6,4 +6,8 @@ interface PartyDetailsView {
 
     fun showPartyDetails(details: Party)
 
+    fun showLoader()
+
+    fun hideLoader()
+
 }

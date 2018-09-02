@@ -56,6 +56,9 @@ data class Party(
         @SerializedName("urlImageMedium")
         val urlImageMedium: String?,
 
+        @SerializedName("urlImageFull")
+        val urlImageFull: String?,
+
         @SerializedName("dateCreated")
         val dateCreated: String,
 
