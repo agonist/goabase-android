@@ -30,16 +30,23 @@ class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
         print("")
 
         party.apply {
-            urlImageFull?.let {
-                val uri = Uri.parse(it)
-                party_picture.setImageURI(uri)
-            }
+            party_picture.setImageURI(urlImageFull)
             party_name.text = nameParty
 
             val dateStart = OffsetDateTime.parse(dateStart).toLocalDateTime()
             val dateEnd = OffsetDateTime.parse(dateEnd).toLocalDateTime()
             party_date.text = "${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateStart)} - ${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateEnd)}"
-            party_location.text = textLocation
+
+            if (textLocation.length > 100) {
+                party_location.text = nameTown
+                location_title.visibility = View.VISIBLE
+                location_full.visibility = View.VISIBLE
+                location_full.text = textLocation
+            } else {
+                location_title.visibility = View.GONE
+                location_full.visibility = View.GONE
+                party_location.text = textLocation
+            }
             party_location.setOnClickListener {
                 val gmmIntentUri = Uri.parse("geo:${party.geoLat},${party.geoLon}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
@@ -47,13 +54,31 @@ class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
                 startActivity(mapIntent)
             }
 
-            party_lineup.text = textLineup
-            Linkify.addLinks(party_lineup, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
+            if (textLineup.isNotEmpty()){
+                party_lineup.text = textLineup
+                Linkify.addLinks(party_lineup, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
+            }
 
-            party_info.text = textMore
-            party_deco.text = textDeco
-            party_fee.text = textEntryFee
-            party_organizer.text = "${nameOrganizer}\n${urlOrganizer}"
+            if (textMore.isNotEmpty()) {
+                party_info.text = textMore
+                Linkify.addLinks(party_info, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
+            }
+
+            if (textDeco.isNotEmpty()) {
+                party_deco.text = textDeco
+                Linkify.addLinks(party_deco, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
+            }
+
+            if (textEntryFee.isNotEmpty()) {
+                party_fee.text = textEntryFee
+            }
+
+            if (nameOrganizer.isNotEmpty()) {
+                party_organizer.text = "${nameOrganizer}"
+            }
+            urlOrganizer?.let {
+                party_organizer.text = "${party_organizer.text}\n${urlOrganizer}"
+            }
             Linkify.addLinks(party_organizer, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
         }
 

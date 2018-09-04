@@ -21,15 +21,18 @@
             app:layout_constraintTop_toTopOf="parent"/>
         <android.support.constraint.ConstraintLayout android:id="@+id/details_container"
                                                      android:layout_width="match_parent"
-                                                     android:layout_height="0dp">
+                                                     android:layout_height="0dp"
+                                                     android:paddingBottom="8dp">
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/party_picture"
                 android:layout_width="match_parent" android:layout_height="200dp"
                 app:actualImageScaleType="centerCrop"
+                app:failureImage="@drawable/rick"
+                app:failureImageScaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:placeholderImage="@drawable/rick"
-                app:placeholderImageScaleType="fitCenter"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeholderImageScaleType="fitXY"
             />
             <TextView
                 android:id="@+id/party_name"
@@ -91,9 +94,11 @@
             <TextView
                 android:id="@+id/party_lineup"
                 style="@style/WhiteContentTv"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_width="0dp" android:layout_height="wrap_content"
                 android:layout_marginStart="8dp" android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:layout_marginEnd="8dp"
+                android:text="Unknown"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"/>
             <TextView
@@ -107,9 +112,11 @@
             <TextView
                 android:id="@+id/party_info"
                 style="@style/WhiteContentTv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content" android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp" android:text="TextView"
+                android:layout_marginTop="8dp" android:layout_marginEnd="8dp"
+                android:text="Unknown"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"/>
             <TextView
@@ -124,9 +131,11 @@
             <TextView
                 android:id="@+id/party_deco"
                 style="@style/WhiteContentTv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content" android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp" android:text="TextView"
+                android:layout_marginTop="8dp" android:layout_marginEnd="8dp"
+                android:text="Unknown "
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"/>
             <TextView
@@ -140,9 +149,11 @@
             <TextView
                 android:id="@+id/party_fee"
                 style="@style/WhiteContentTv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content" android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp" android:text="TextView"
+                android:layout_marginTop="8dp" android:layout_marginEnd="8dp"
+                android:text="Unknown "
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5"/>
             <ImageView
@@ -164,11 +175,32 @@
             <TextView
                 android:id="@+id/party_organizer"
                 style="@style/WhiteContentTv"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content" android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp" android:text="TextView"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Unknown "
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4"/>
+            <TextView
+                android:id="@+id/location_title"
+                style="@style/GreenTitleTv"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Location"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/party_organizer"/>
+            <TextView
+                android:id="@+id/location_full"
+                style="@style/WhiteContentTv"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Unknown "
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/location_title"/>
 
         </android.support.constraint.ConstraintLayout>
 

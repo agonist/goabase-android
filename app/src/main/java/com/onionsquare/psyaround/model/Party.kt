@@ -48,7 +48,7 @@ data class Party(
         val nameOrganizer: String,
 
         @SerializedName("urlOrganizer")
-        val urlOrganizer: String,
+        val urlOrganizer: String?,
 
         @SerializedName("urlImageSmall")
         val urlImageSmall: String?,

@@ -1,6 +1,5 @@
 package com.onionsquare.psyaround.feature.parties
 
-import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -40,11 +39,7 @@ class PartiesAdapter(val items: List<Party>, val listener: PartyClickListener) :
             val date = OffsetDateTime.parse(party.dateStart).toLocalDateTime()
             val txt = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(date)
             partyDate.text = txt
-//            partyFlag.setImageDrawable(itemView.context.getDrawable(Utils.getMipmapResId(itemView.context, party.isoCountry.toLowerCase() + "_flag")))
-            party.urlImageMedium?.let {
-                val uri = Uri.parse(it)
-                partyPicture.setImageURI(uri)
-            }
+            partyPicture.setImageURI(party.urlImageMedium)
 
             itemView.setOnClickListener {
                 listener.onClick(party)
