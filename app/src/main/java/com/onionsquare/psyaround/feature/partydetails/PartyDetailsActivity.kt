@@ -23,6 +23,7 @@ class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
 
         val partyId = intent.getStringExtra("PARTY_ID")
         PartyDetailsPresenter(this, PsyApp.instance.api).init(partyId)
+        back_Arrow.setOnClickListener { onBackPressed() }
     }
 
 
