@@ -23,5 +23,4 @@ class PartyDetailsPresenter(val view: PartyDetailsView, val api: GoaBaseApi) {
     fun end() {
         disp?.dispose()
     }
-
 }

@@ -24,10 +24,7 @@ class PsyApp : Application() {
         initRetrofit()
         Fresco.initialize(this);
         AndroidThreeTen.init(this);
-
     }
-
-
 
     private fun initRetrofit() {
         val gson = GsonBuilder()
