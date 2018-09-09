@@ -9,6 +9,7 @@ import android.view.View
 import com.onionsquare.goabase.PsyApp
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.BaseActivity
+import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.model.Party
 import kotlinx.android.synthetic.main.party_details.*
 import org.threeten.bp.OffsetDateTime
@@ -21,15 +22,13 @@ class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val partyId = intent.getStringExtra("PARTY_ID")
+        val partyId = intent.getStringExtra(PartiesActivity.PARTY_ID_EXTRA)
         PartyDetailsPresenter(this, PsyApp.instance.api).init(partyId)
         back_Arrow.setOnClickListener { onBackPressed() }
     }
 
 
     override fun showPartyDetails(party: Party) {
-        print("")
-
         party.apply {
             party_picture.setImageURI(urlImageFull)
             party_name.text = nameParty
@@ -94,10 +93,6 @@ class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
         details_progress.visibility = View.GONE
         details_container.visibility = View.VISIBLE
     }
-
-
-    override fun provideToolbarTitle(): String = getString(R.string.party_details)
-
 
     override fun provideLayout(): Int = R.layout.party_details
 

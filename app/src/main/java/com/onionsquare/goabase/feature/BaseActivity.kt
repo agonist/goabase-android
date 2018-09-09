@@ -12,12 +12,9 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(provideLayout())
         val toolbar = provideToolbar()
         toolbar?.let {
-            toolbar.title = provideToolbarTitle()
             setSupportActionBar(toolbar)
         }
     }
-
-    abstract fun provideToolbarTitle(): String
 
     abstract fun provideLayout(): Int
 

@@ -16,6 +16,11 @@ import kotlinx.android.synthetic.main.header.view.*
 
 class CountriesActivity : BaseActivity(), CountriesView {
 
+    companion object {
+        val COUNTRY_NAME_EXTRA = "COUNTRY_NAME"
+        val COUNTRY_ISO_EXTRA = "COUNTRY_ISO"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -34,8 +39,8 @@ class CountriesActivity : BaseActivity(), CountriesView {
         val adapter = CountryAdapter(countries, object : CountryAdapter.CountryClickListener {
             override fun onClick(country: Country) {
                 val intent = Intent(this@CountriesActivity, PartiesActivity::class.java)
-                intent.putExtra("COUNTRY_NAME", country.nameCountry)
-                intent.putExtra("COUNTRY_ISO", country.isoCountry)
+                intent.putExtra(COUNTRY_NAME_EXTRA, country.nameCountry)
+                intent.putExtra(COUNTRY_ISO_EXTRA, country.isoCountry)
                 startActivity(intent)
             }
         })
@@ -51,9 +56,6 @@ class CountriesActivity : BaseActivity(), CountriesView {
         country_progress.visibility = View.GONE
         countries_recycler.visibility = View.VISIBLE
     }
-
-
-    override fun provideToolbarTitle(): String = ""
 
     override fun provideLayout(): Int = R.layout.countries
 

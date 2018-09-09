@@ -11,12 +11,17 @@ import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.BaseActivity
 import com.onionsquare.goabase.feature.Divider
 import com.onionsquare.goabase.feature.HeaderViewDecoration
+import com.onionsquare.goabase.feature.country.CountriesActivity
 import com.onionsquare.goabase.feature.partydetails.PartyDetailsActivity
 import com.onionsquare.goabase.model.Party
 import kotlinx.android.synthetic.main.header.view.*
 import kotlinx.android.synthetic.main.parties.*
 
 class PartiesActivity : BaseActivity(), PartiesView {
+
+    companion object {
+        val PARTY_ID_EXTRA = "PARTY_ID"
+    }
 
     var presenter: PartiesPresenter? = null
 
@@ -26,7 +31,7 @@ class PartiesActivity : BaseActivity(), PartiesView {
         parties_recycler.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(this)
         parties_recycler.layoutManager = layoutManager
-        val country = intent.getStringExtra("COUNTRY_NAME")
+        val country = intent.getStringExtra(CountriesActivity.COUNTRY_NAME_EXTRA)
         displayBackArrow(true)
         presenter = PartiesPresenter(this, PsyApp.instance.api)
         presenter?.init(country)
@@ -39,8 +44,8 @@ class PartiesActivity : BaseActivity(), PartiesView {
 
     override fun showParties(parties: List<Party>) {
         val view = layoutInflater.inflate(R.layout.header, null)
-        val country = intent.getStringExtra("COUNTRY_NAME")
-        val iso = intent.getStringExtra("COUNTRY_ISO")
+        val country = intent.getStringExtra(CountriesActivity.COUNTRY_NAME_EXTRA)
+        val iso = intent.getStringExtra(CountriesActivity.COUNTRY_ISO_EXTRA)
 
         view.name_header.text = "Parties in $country"
         view.flag_header.setImageDrawable(getDrawable(Utils.getMipmapResId(this, iso.toLowerCase() + "_flag")))
@@ -49,7 +54,7 @@ class PartiesActivity : BaseActivity(), PartiesView {
         parties_recycler.adapter = PartiesAdapter(parties, object : PartiesAdapter.PartyClickListener {
             override fun onClick(party: Party) {
                 val intent: Intent = Intent(this@PartiesActivity, PartyDetailsActivity::class.java)
-                intent.putExtra("PARTY_ID", party.id)
+                intent.putExtra(PARTY_ID_EXTRA, party.id)
                 startActivity(intent)
             }
         })
@@ -69,9 +74,4 @@ class PartiesActivity : BaseActivity(), PartiesView {
     override fun provideLayout(): Int = R.layout.parties
 
     override fun provideToolbar(): Toolbar = custom_toolbar as Toolbar
-
-    override fun provideToolbarTitle(): String {
-        return ""
-    }
-
 }

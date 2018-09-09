@@ -7,10 +7,10 @@ import io.reactivex.schedulers.Schedulers
 
 class CountriesPresenter(val view: CountriesView, val api: GoaBaseApi) {
 
-    var disp :Disposable? = null
+    var disposable :Disposable? = null
 
     fun init() {
-       disp =  api.getCountries("list-all")
+        disposable =  api.getCountries("list-all")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { view.showLoader() }
@@ -21,7 +21,6 @@ class CountriesPresenter(val view: CountriesView, val api: GoaBaseApi) {
     }
 
     fun end() {
-        disp?.dispose()
+        disposable?.dispose()
     }
-
 }
