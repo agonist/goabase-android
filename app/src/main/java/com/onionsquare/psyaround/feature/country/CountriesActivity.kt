@@ -1,16 +1,16 @@
-package com.onionsquare.psyaround.feature.country
+package com.onionsquare.goabase.feature.country
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.View
-import com.onionsquare.psyaround.PsyApp
-import com.onionsquare.psyaround.R
-import com.onionsquare.psyaround.feature.BaseActivity
-import com.onionsquare.psyaround.feature.HeaderViewDecoration
-import com.onionsquare.psyaround.feature.parties.PartiesActivity
-import com.onionsquare.psyaround.model.Country
+import com.onionsquare.goabase.PsyApp
+import com.onionsquare.goabase.R
+import com.onionsquare.goabase.feature.BaseActivity
+import com.onionsquare.goabase.feature.HeaderViewDecoration
+import com.onionsquare.goabase.feature.parties.PartiesActivity
+import com.onionsquare.goabase.model.Country
 import kotlinx.android.synthetic.main.countries.*
 import kotlinx.android.synthetic.main.header.view.*
 

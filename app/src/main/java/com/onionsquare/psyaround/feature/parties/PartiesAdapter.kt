@@ -1,4 +1,4 @@
-package com.onionsquare.psyaround.feature.parties
+package com.onionsquare.goabase.feature.parties
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.facebook.drawee.view.SimpleDraweeView
-import com.onionsquare.psyaround.R
-import com.onionsquare.psyaround.model.Party
+import com.onionsquare.goabase.R
+import com.onionsquare.goabase.model.Party
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle

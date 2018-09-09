@@ -1,4 +1,4 @@
-package com.onionsquare.psyaround.feature.country
+package com.onionsquare.goabase.feature.country
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.heetch.countrypicker.Utils
-import com.onionsquare.psyaround.R
-import com.onionsquare.psyaround.model.Country
+import com.onionsquare.goabase.R
+import com.onionsquare.goabase.model.Country
 
 class CountryAdapter(val items: List<Country>, val listener: CountryClickListener) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
 

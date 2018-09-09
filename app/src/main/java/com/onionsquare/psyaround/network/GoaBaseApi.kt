@@ -1,8 +1,8 @@
-package com.onionsquare.psyaround.network
+package com.onionsquare.goabase.network
 
-import com.onionsquare.psyaround.model.Countries
-import com.onionsquare.psyaround.model.Parties
-import com.onionsquare.psyaround.model.PartyReply
+import com.onionsquare.goabase.model.Countries
+import com.onionsquare.goabase.model.Parties
+import com.onionsquare.goabase.model.PartyReply
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path

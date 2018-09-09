@@ -1,4 +1,4 @@
-package com.onionsquare.psyaround.feature
+package com.onionsquare.goabase.feature
 
 import android.graphics.Canvas
 import android.graphics.Rect

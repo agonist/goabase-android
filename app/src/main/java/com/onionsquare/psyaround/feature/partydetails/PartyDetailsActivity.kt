@@ -1,4 +1,4 @@
-package com.onionsquare.psyaround.feature.partydetails
+package com.onionsquare.goabase.feature.partydetails
 
 import android.content.Intent
 import android.net.Uri
@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.text.util.Linkify
 import android.view.View
-import com.onionsquare.psyaround.PsyApp
-import com.onionsquare.psyaround.R
-import com.onionsquare.psyaround.feature.BaseActivity
-import com.onionsquare.psyaround.model.Party
+import com.onionsquare.goabase.PsyApp
+import com.onionsquare.goabase.R
+import com.onionsquare.goabase.feature.BaseActivity
+import com.onionsquare.goabase.model.Party
 import kotlinx.android.synthetic.main.party_details.*
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter

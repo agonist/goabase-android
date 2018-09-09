@@ -1,6 +1,6 @@
-package com.onionsquare.psyaround.feature.partydetails
+package com.onionsquare.goabase.feature.partydetails
 
-import com.onionsquare.psyaround.network.GoaBaseApi
+import com.onionsquare.goabase.network.GoaBaseApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers

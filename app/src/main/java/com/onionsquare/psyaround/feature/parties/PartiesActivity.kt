@@ -1,4 +1,4 @@
-package com.onionsquare.psyaround.feature.parties
+package com.onionsquare.goabase.feature.parties
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,13 +6,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.view.View
 import com.heetch.countrypicker.Utils
-import com.onionsquare.psyaround.PsyApp
-import com.onionsquare.psyaround.R
-import com.onionsquare.psyaround.feature.BaseActivity
-import com.onionsquare.psyaround.feature.Divider
-import com.onionsquare.psyaround.feature.HeaderViewDecoration
-import com.onionsquare.psyaround.feature.partydetails.PartyDetailsActivity
-import com.onionsquare.psyaround.model.Party
+import com.onionsquare.goabase.PsyApp
+import com.onionsquare.goabase.R
+import com.onionsquare.goabase.feature.BaseActivity
+import com.onionsquare.goabase.feature.Divider
+import com.onionsquare.goabase.feature.HeaderViewDecoration
+import com.onionsquare.goabase.feature.partydetails.PartyDetailsActivity
+import com.onionsquare.goabase.model.Party
 import kotlinx.android.synthetic.main.header.view.*
 import kotlinx.android.synthetic.main.parties.*
 

@@ -1,10 +1,10 @@
-package com.onionsquare.psyaround
+package com.onionsquare.goabase
 
 import android.app.Application
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.gson.GsonBuilder
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.onionsquare.psyaround.network.GoaBaseApi
+import com.onionsquare.goabase.network.GoaBaseApi
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

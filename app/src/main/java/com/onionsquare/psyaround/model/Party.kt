@@ -1,4 +1,4 @@
-package com.onionsquare.psyaround.model
+package com.onionsquare.goabase.model
 
 import com.google.gson.annotations.SerializedName
 

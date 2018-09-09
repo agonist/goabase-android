@@ -1,4 +1,4 @@
-package com.onionsquare.psyaround.feature
+package com.onionsquare.goabase.feature
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
 import android.view.View
 
-import com.onionsquare.psyaround.R
+import com.onionsquare.goabase.R
 
 class Divider(context: Context) : RecyclerView.ItemDecoration() {
     private val mDivider: Drawable

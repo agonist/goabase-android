@@ -1,6 +1,6 @@
-package com.onionsquare.psyaround.feature.partydetails
+package com.onionsquare.goabase.feature.partydetails
 
-import com.onionsquare.psyaround.model.Party
+import com.onionsquare.goabase.model.Party
 
 interface PartyDetailsView {
 

@@ -1,4 +1,4 @@
-package com.onionsquare.psyaround
+package com.onionsquare.goabase
 
 import org.junit.Test
 

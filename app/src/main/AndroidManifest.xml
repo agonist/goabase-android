@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.onionsquare.psyaround">
+          package="com.onionsquare.goabase">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 

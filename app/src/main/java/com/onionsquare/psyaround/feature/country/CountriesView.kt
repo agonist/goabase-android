@@ -1,6 +1,6 @@
-package com.onionsquare.psyaround.feature.country
+package com.onionsquare.goabase.feature.country
 
-import com.onionsquare.psyaround.model.Country
+import com.onionsquare.goabase.model.Country
 
 interface CountriesView {
 

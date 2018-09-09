@@ -1,4 +1,4 @@
-package com.onionsquare.psyaround.feature
+package com.onionsquare.goabase.feature
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
