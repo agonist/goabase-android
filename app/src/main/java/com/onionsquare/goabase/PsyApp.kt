@@ -12,8 +12,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-
-
 class PsyApp : Application() {
 
     lateinit var api: GoaBaseApi
@@ -22,8 +20,8 @@ class PsyApp : Application() {
         super.onCreate()
         instance = this
         initRetrofit()
-        Fresco.initialize(this);
-        AndroidThreeTen.init(this);
+        Fresco.initialize(this)
+        AndroidThreeTen.init(this)
     }
 
     private fun initRetrofit() {
