@@ -5,4 +5,12 @@
     <color name="colorPrimaryLight">#656565</color>
     <color name="flashyGreen">#75fa61</color>
     <color name="flashyYellow">#FFFF00</color>
+
+
+    <color name="material_drawer_background">#656565</color>
+    <color name="material_drawer_primary_text">#75fa61</color>
+    <color name="material_drawer_selected_text">#75fa61</color>
+
+
+    <color name="material_drawer_selected">#656565</color>
 </resources>

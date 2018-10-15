@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textColor="@color/flashyYellow"
+            android:textColor="?attr/subtitleRegularTextColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/party_picture"
             tools:text="Sep 30, 2018 6pm"/>
@@ -44,7 +44,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:textColor="@color/flashyGreen"
+            android:textColor="?attr/regularTextColor"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textColor="@color/flashyGreen"
+            android:textColor="?attr/regularTextColor"
             app:layout_constraintStart_toEndOf="@+id/party_location_icon"
             app:layout_constraintTop_toBottomOf="@+id/party_name"
             tools:text="Croatia"/>

@@ -4,6 +4,18 @@
     <string name="countries_title">Countries</string>
     <string name="party_details">Details</string>
 
+    <string name="party_details_line_up">Line up</string>
+    <string name="party_details_infos">Infos</string>
+    <string name="party_details_unknown">Unknown </string>
+    <string name="party_details_deco">Deco</string>
+    <string name="party_details_fee">Entry fee</string>
+    <string name="party_details_organizer">Organizer</string>
+    <string name="party_details_location">Location</string>
+
+    <string name="menu_about">About</string>
+
+
+
     <plurals name="numberOfParties">
         <item quantity="one">%d party</item>
         <item quantity="other">%d parties</item>
