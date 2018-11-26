@@ -14,7 +14,7 @@ class CountriesPresenter(val view: CountriesView, val api: GoaBaseApi) {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { view.showLoader() }
-                .subscribe({
+                .subscribe({ it ->
                     view.hideLoader()
                     view.showCountries(it.countries.sortedBy { it.numParties.toInt() }.asReversed())
                 }, {})

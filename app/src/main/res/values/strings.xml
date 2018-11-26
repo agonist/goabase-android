@@ -14,6 +14,11 @@
 
     <string name="menu_about">About</string>
 
+    <string name="about_text">The app is made with love to make it easier for everyone to access to Goabase party data.\n
+    if you find many information missing in party details page it\'s just nobody has added it and it\'s not something we can change
+    /n
+    /n
+    If you want to help building/improving the app feel free to contact us</string>
 
 
     <plurals name="numberOfParties">

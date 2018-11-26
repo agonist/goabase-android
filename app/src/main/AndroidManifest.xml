@@ -11,8 +11,9 @@
                  android:supportsRtl="true"
                  android:theme="@style/AppTheme">
 
-        <activity android:name=".feature.country.CountriesActivity">
+        <activity android:name=".feature.country.CountriesActivity" android:theme="@style/AppTheme">
             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -20,6 +21,7 @@
         </activity>
         <activity android:name=".feature.parties.PartiesActivity"/>
         <activity android:name=".feature.partydetails.PartyDetailsActivity"/>
+        <activity android:name=".feature.about.AboutActivity"/>
 
     </application>
 </manifest>

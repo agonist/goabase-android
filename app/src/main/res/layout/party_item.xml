@@ -6,14 +6,14 @@
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    android:background="@color/colorPrimaryLight"
+    android:background="@color/purpleDark"
     android:elevation="0dp"
     app:cardElevation="0dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/purpleDark">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/party_picture"

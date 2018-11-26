@@ -3,12 +3,12 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools"
-            android:background="@color/colorPrimary">
+            android:background="@color/purpleDark">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/purpleDark"
         android:visibility="visible">
 
         <ProgressBar
@@ -92,9 +92,10 @@
             <TextView
                 android:id="@+id/textView"
                 style="@style/GreenTitleTv"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" android:layout_marginTop="24dp"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:text="@string/party_details_line_up"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView4"/>
             <TextView
@@ -104,15 +105,18 @@
                 android:layout_marginStart="8dp" android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/party_details_unknown"
+                android:textColor="@color/moutarde"
+                android:textColorLink="@color/alienGreen"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"/>
             <TextView
                 android:id="@+id/textView2"
                 style="@style/GreenTitleTv"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/party_details_infos"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/party_lineup"/>
             <TextView
@@ -122,16 +126,18 @@
                 android:layout_height="wrap_content" android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp" android:layout_marginEnd="8dp"
                 android:text="@string/party_details_unknown"
+                android:textColor="@color/moutarde"
+                android:textColorLink="@color/alienGreen"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"/>
             <TextView
                 android:id="@+id/textView3"
                 style="@style/GreenTitleTv"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_width="0dp" android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/party_details_deco"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/party_info"/>
             <TextView
@@ -141,15 +147,18 @@
                 android:layout_height="wrap_content" android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp" android:layout_marginEnd="8dp"
                 android:text="@string/party_details_unknown"
+                android:textColor="@color/moutarde"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"/>
             <TextView
                 android:id="@+id/textView5"
                 style="@style/GreenTitleTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp" android:text="@string/party_details_fee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/party_details_fee"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/party_deco"/>
             <TextView
@@ -159,6 +168,8 @@
                 android:layout_height="wrap_content" android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp" android:layout_marginEnd="8dp"
                 android:text="@string/party_details_unknown"
+                android:textColor="@color/moutarde"
+                android:textColorLink="@color/alienGreen"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5"/>
@@ -173,9 +184,10 @@
             <TextView
                 android:id="@+id/textView4"
                 style="@style/GreenTitleTv"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/party_details_organizer"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/party_fee"/>
             <TextView
@@ -186,15 +198,18 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/party_details_unknown"
+                android:textColor="@color/moutarde"
+                android:textColorLink="@color/alienGreen"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4"/>
             <TextView
                 android:id="@+id/location_title"
                 style="@style/GreenTitleTv"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/party_details_location"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/party_organizer"/>
             <TextView
@@ -202,8 +217,11 @@
                 style="@style/WhiteContentTv"
                 android:layout_width="0dp" android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="@string/party_details_unknown"
+                android:textColor="@color/moutarde"
+                android:textColorLink="@color/alienGreen"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/location_title"/>

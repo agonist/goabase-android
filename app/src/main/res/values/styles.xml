@@ -5,9 +5,10 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimary</item>
-        <item name="colorControlNormal">@color/flashyGreen</item>
-        <item name="regularTextColor">@color/flashyGreen</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/purpleLight</item>
+        <item name="colorControlNormal">@color/moutarde</item>
+        <item name="regularTextColor">@color/moutarde</item>
+        <item name="greyTextColor">@color/gray</item>
         <item name="subtitleRegularTextColor">@color/flashyYellow</item>
     </style>
 
@@ -19,14 +20,17 @@
     </style>
 
 
-    <style name="GreenTitleTv"  parent="TextAppearance.AppCompat">
-        <item name="android:textSize">18sp</item>
+    <style name="GreenTitleTv" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?attr/regularTextColor</item>
+        <item name="android:textColor">?attr/greyTextColor</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingTop">32dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:background">@color/spaceBlue</item>
     </style>
 
-
-    <style name="WhiteContentTv"  parent="TextAppearance.AppCompat">
+    <style name="WhiteContentTv" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@android:color/white</item>
     </style>
 
