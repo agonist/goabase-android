@@ -13,7 +13,7 @@ import com.onionsquare.goabase.model.Party
 import kotlinx.android.synthetic.main.parties_map.*
 
 
-class PArtiesMapActivity : BaseActivity(), OnMapReadyCallback {
+class PartiesMapActivity : BaseActivity(), OnMapReadyCallback {
 
     var googleMap: GoogleMap? = null
 

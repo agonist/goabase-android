@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/open_map"
-            android:icon="@drawable/alien"
-            android:title="map" />
-    </group>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/open_map"
+        android:icon="@drawable/ic_action_name"
+        android:title="map"
+        app:showAsAction="ifRoom"/>
 </menu>

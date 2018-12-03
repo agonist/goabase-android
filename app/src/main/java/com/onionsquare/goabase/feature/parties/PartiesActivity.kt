@@ -67,7 +67,7 @@ class PartiesActivity : BaseActivity(), PartiesView {
         item.itemId.let {
             when (it) {
                 R.id.open_map -> {
-                    Intent(this@PartiesActivity, PArtiesMapActivity::class.java).let { intent ->
+                    Intent(this@PartiesActivity, PartiesMapActivity::class.java).let { intent ->
                         intent.putExtra("PARTIES", parties)
                         startActivity(intent)
                     }
