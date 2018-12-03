@@ -7,9 +7,13 @@
                  android:name=".PsyApp"
                  android:icon="@mipmap/ic_launcher"
                  android:label="@string/app_name"
-                 android:roundIcon="@mipmap/ic_launcher_round"
+                 android:roundIcon="@mipmap/ic_launcher"
                  android:supportsRtl="true"
                  android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAvpbwJ_L0X-QyolF86wge0VS_8cwwQka0" />
 
         <activity android:name=".feature.country.CountriesActivity" android:theme="@style/AppTheme">
             <intent-filter>
@@ -22,6 +26,7 @@
         <activity android:name=".feature.parties.PartiesActivity"/>
         <activity android:name=".feature.partydetails.PartyDetailsActivity"/>
         <activity android:name=".feature.about.AboutActivity"/>
+        <activity android:name=".feature.parties.PArtiesMapActivity"/>
 
     </application>
 </manifest>

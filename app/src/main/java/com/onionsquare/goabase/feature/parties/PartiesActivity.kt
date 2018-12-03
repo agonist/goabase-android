@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.onionsquare.goabase.PsyApp
 import com.onionsquare.goabase.R
@@ -21,12 +23,13 @@ class PartiesActivity : BaseActivity(), PartiesView {
     }
 
     var presenter: PartiesPresenter? = null
+    var parties: ArrayList<Party>? = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.apply {
             val country = intent.getStringExtra(CountriesActivity.COUNTRY_NAME_EXTRA)
-            title =  "Parties in $country"
+            title = "Parties in $country"
         }
         parties_recycler.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(this)
@@ -43,6 +46,7 @@ class PartiesActivity : BaseActivity(), PartiesView {
     }
 
     override fun showParties(parties: List<Party>) {
+        this.parties?.addAll(parties)
         parties_recycler.addItemDecoration(Divider(applicationContext))
         parties_recycler.adapter = PartiesAdapter(parties, object : PartiesAdapter.PartyClickListener {
             override fun onClick(party: Party) {
@@ -52,6 +56,28 @@ class PartiesActivity : BaseActivity(), PartiesView {
             }
         })
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.map_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        item.itemId.let {
+            when (it) {
+                R.id.open_map -> {
+                    Intent(this@PartiesActivity, PArtiesMapActivity::class.java).let { intent ->
+                        intent.putExtra("PARTIES", parties)
+                        startActivity(intent)
+                    }
+                }
+                else -> {
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun showLoader() {

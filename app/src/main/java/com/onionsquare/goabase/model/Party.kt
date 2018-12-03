@@ -1,6 +1,7 @@
 package com.onionsquare.goabase.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Parties(
         @SerializedName("partylist")
@@ -89,4 +90,4 @@ data class Party(
         @SerializedName("textMore")
         val textMore: String
 
-)
+) : Serializable
