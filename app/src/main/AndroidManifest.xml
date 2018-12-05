@@ -26,6 +26,7 @@
         <activity android:name=".feature.parties.PartiesActivity"/>
         <activity android:name=".feature.partydetails.PartyDetailsActivity"/>
         <activity android:name=".feature.parties.PartiesMapActivity"/>
+        <activity android:name=".feature.parties.PartiesOfflineActivity"/>
 
     </application>
 </manifest>

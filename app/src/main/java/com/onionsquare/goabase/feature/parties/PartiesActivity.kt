@@ -69,6 +69,13 @@ class PartiesActivity : BaseActivity(), PartiesView {
                 R.id.open_map -> {
                     Intent(this@PartiesActivity, PartiesMapActivity::class.java).let { intent ->
                         intent.putExtra("PARTIES", parties)
+                        for (party in parties!!) {
+                            if (!party.geoLat.isNullOrBlank() && !party.geoLat.isNullOrBlank()) {
+                                intent.putExtra("ZOOM_POS_LAT", party.geoLat)
+                                intent.putExtra("ZOOM_POS_LONG", party.geoLon)
+                                break
+                            }
+                        }
                         startActivity(intent)
                     }
                 }
