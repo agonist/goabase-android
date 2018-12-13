@@ -1,5 +1,7 @@
 package com.onionsquare.goabase.feature.country
 
+import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -32,8 +34,10 @@ class CountryAdapter(val items: List<Country>, val listener: CountryClickListene
             name.text = country.nameCountry
             count.text = itemView.context.resources.getQuantityString(R.plurals.numberOfParties, country.numParties.toInt(), country.numParties.toInt())
 
-            flag.setImageDrawable(itemView.context.getDrawable(Utils.getMipmapResId(itemView.context, country.isoCountry.toLowerCase() + "_flag")))
-
+            var drawable: Drawable? = ContextCompat.getDrawable(itemView.context, Utils.getMipmapResId(itemView.context, country.isoCountry.toLowerCase() + "_flag"))
+            if (drawable != null) {
+                flag.setImageDrawable(drawable)
+            }
             itemView.setOnClickListener { listener.onClick(country) }
         }
     }

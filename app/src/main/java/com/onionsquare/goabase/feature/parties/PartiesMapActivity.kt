@@ -32,9 +32,11 @@ class PartiesMapActivity : BaseActivity(), OnMapReadyCallback {
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map
 
-        val latZoom = intent.getStringExtra("ZOOM_POS_LAT").toDouble()
-        val longZoom = intent.getStringExtra("ZOOM_POS_LONG").toDouble()
-        googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latZoom, longZoom), 6f))
+        val latZoom = intent.getStringExtra("ZOOM_POS_LAT")?.toDouble()
+        val longZoom = intent.getStringExtra("ZOOM_POS_LONG")?.toDouble()
+        if (latZoom != null && longZoom != null) {
+            googleMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latZoom, longZoom), 6f))
+        }
 
         val clusterManager = ClusterManager<PartyMarker>(this, googleMap)
         clusterManager.renderer = CustomClusterRenderer(this, googleMap!!, clusterManager)
