@@ -11,10 +11,6 @@
                  android:supportsRtl="true"
                  android:theme="@style/AppTheme">
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAvpbwJ_L0X-QyolF86wge0VS_8cwwQka0" />
-
         <activity android:name=".feature.country.CountriesActivity" android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -25,8 +21,6 @@
         </activity>
         <activity android:name=".feature.parties.PartiesActivity"/>
         <activity android:name=".feature.partydetails.PartyDetailsActivity"/>
-        <activity android:name=".feature.parties.PartiesMapActivity"/>
         <activity android:name=".feature.parties.PartiesOfflineActivity"/>
-
     </application>
 </manifest>

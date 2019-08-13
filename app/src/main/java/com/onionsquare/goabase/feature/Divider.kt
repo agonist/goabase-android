@@ -16,7 +16,7 @@ class Divider(context: Context) : RecyclerView.ItemDecoration() {
         mDivider = context.resources.getDrawable(R.drawable.alien)
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         if (parent.getChildAdapterPosition(view) == 0) {
             super.getItemOffsets(outRect, view, parent, state)
         } else {
@@ -25,7 +25,7 @@ class Divider(context: Context) : RecyclerView.ItemDecoration() {
         }
     }
 
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         val left = parent.width / 2 - 40
         val right = parent.width / 2 + 40
 

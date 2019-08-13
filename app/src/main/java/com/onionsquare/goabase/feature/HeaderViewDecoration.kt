@@ -7,7 +7,7 @@ import android.view.View
 
 class HeaderViewDecoration(private val customView: View) : RecyclerView.ItemDecoration() {
 
-    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDraw(c, parent, state)
         customView.layout(parent.left, 0, parent.right, customView.measuredHeight)
         for (i in 0 until parent.childCount) {
@@ -24,7 +24,7 @@ class HeaderViewDecoration(private val customView: View) : RecyclerView.ItemDeco
         }
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
         if (parent.getChildAdapterPosition(view) == 0) {
             customView.measure(View.MeasureSpec.makeMeasureSpec(parent.measuredWidth, View.MeasureSpec.AT_MOST),
                     View.MeasureSpec.makeMeasureSpec(parent.measuredHeight, View.MeasureSpec.AT_MOST))

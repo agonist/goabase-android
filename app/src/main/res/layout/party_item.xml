@@ -20,7 +20,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:actualImageScaleType="fitXY"
+            android:adjustViewBounds="true"
             app:failureImage="@drawable/no_picture"
             app:failureImageScaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"

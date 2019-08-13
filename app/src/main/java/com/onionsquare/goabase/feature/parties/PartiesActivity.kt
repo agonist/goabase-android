@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import com.onionsquare.goabase.PsyApp
 import com.onionsquare.goabase.R
@@ -56,35 +54,6 @@ class PartiesActivity : BaseActivity(), PartiesView {
             }
         })
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.map_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        item.itemId.let {
-            when (it) {
-                R.id.open_map -> {
-                    Intent(this@PartiesActivity, PartiesMapActivity::class.java).let { intent ->
-                        intent.putExtra("PARTIES", parties)
-                        for (party in parties!!) {
-                            if (!party.geoLat.isNullOrBlank() && !party.geoLat.isNullOrBlank()) {
-                                intent.putExtra("ZOOM_POS_LAT", party.geoLat)
-                                intent.putExtra("ZOOM_POS_LONG", party.geoLon)
-                                break
-                            }
-                        }
-                        startActivity(intent)
-                    }
-                }
-                else -> {
-                }
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun showLoader() {
