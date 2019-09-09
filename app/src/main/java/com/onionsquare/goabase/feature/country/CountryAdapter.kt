@@ -1,18 +1,19 @@
 package com.onionsquare.goabase.feature.country
 
 import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.heetch.countrypicker.Utils
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.model.Country
 
-class CountryAdapter(val items: List<Country>, val listener: CountryClickListener) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
+class CountryAdapter(private val items: ArrayList<Country>, private val listener: CountryClickListener) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>(), Observer<List<Country>> {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
         return CountryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.country_item, parent, false), listener)
@@ -24,7 +25,13 @@ class CountryAdapter(val items: List<Country>, val listener: CountryClickListene
         holder.bind(items[position])
     }
 
-    class CountryViewHolder(itemView: View, val listener: CountryClickListener) : RecyclerView.ViewHolder(itemView) {
+    override fun onChanged(countries: List<Country>) {
+        items.clear()
+        items.addAll(countries)
+        notifyDataSetChanged()
+    }
+
+    class CountryViewHolder(itemView: View, private val listener: CountryClickListener) : RecyclerView.ViewHolder(itemView) {
 
         var name = itemView.findViewById<TextView>(R.id.country_name)
         var count = itemView.findViewById<TextView>(R.id.party_count)
@@ -38,12 +45,12 @@ class CountryAdapter(val items: List<Country>, val listener: CountryClickListene
             if (drawable != null) {
                 flag.setImageDrawable(drawable)
             }
-            itemView.setOnClickListener { listener.onClick(country) }
+            itemView.setOnClickListener { listener.onCountrySelected(country) }
         }
     }
 
     interface CountryClickListener {
-        fun onClick(country: Country)
+        fun onCountrySelected(country: Country)
     }
 
 }

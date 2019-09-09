@@ -1,10 +1,11 @@
 package com.onionsquare.goabase.feature.parties
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import com.facebook.drawee.view.SimpleDraweeView
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.model.Party
@@ -13,7 +14,7 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
 
-class PartiesAdapter(val items: List<Party>, val listener: PartyClickListener) : RecyclerView.Adapter<PartiesAdapter.PartyViewHolder>() {
+class PartiesAdapter(val items: ArrayList<Party>, val listener: PartyClickListener) : RecyclerView.Adapter<PartiesAdapter.PartyViewHolder>(), Observer<List<Party>> {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PartyViewHolder {
         return PartyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.party_item, parent, false), listener)
@@ -23,6 +24,12 @@ class PartiesAdapter(val items: List<Party>, val listener: PartyClickListener) :
 
     override fun onBindViewHolder(holder: PartyViewHolder, position: Int) {
         holder.bind(items[position])
+    }
+
+    override fun onChanged(parties: List<Party>) {
+        items.clear()
+        items.addAll(parties)
+        notifyDataSetChanged()
     }
 
     class PartyViewHolder(itemView: View, val listener: PartyClickListener) : RecyclerView.ViewHolder(itemView) {
@@ -42,12 +49,12 @@ class PartiesAdapter(val items: List<Party>, val listener: PartyClickListener) :
             partyPicture.setImageURI(party.urlImageMedium)
 
             itemView.setOnClickListener {
-                listener.onClick(party)
+                listener.onPartySelected(party)
             }
         }
     }
 
     interface PartyClickListener {
-        fun onClick(party: Party)
+        fun onPartySelected(party: Party)
     }
 }

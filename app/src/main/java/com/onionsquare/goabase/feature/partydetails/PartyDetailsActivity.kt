@@ -5,12 +5,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.util.Linkify
 import android.view.View
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.onionsquare.goabase.R
-import com.onionsquare.goabase.feature.BaseActivity
 import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.model.Party
+import com.onionsquare.goabase.ui.LoadingObserver
 import kotlinx.android.synthetic.main.party_details.*
 import org.koin.android.ext.android.inject
 import org.threeten.bp.OffsetDateTime
@@ -18,22 +18,17 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
 
-class PartyDetailsActivity : BaseActivity() {
+class PartyDetailsActivity : AppCompatActivity() {
 
     private val viewModel: PartyDetailsViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setContentView(R.layout.party_details)
         val partyId = intent.getStringExtra(PartiesActivity.PARTY_ID_EXTRA)
         back_Arrow.setOnClickListener { onBackPressed() }
 
-        viewModel.loading.observe(this, Observer {
-            when (it) {
-                false -> hideLoader()
-                true -> showLoader()
-            }
-        })
+        viewModel.loading.observe(this, LoadingObserver(details_progress, details_container))
 
         viewModel.party.observe(this, Observer {
             showPartyDetails(it)
@@ -98,18 +93,4 @@ class PartyDetailsActivity : BaseActivity() {
         }
 
     }
-
-    private fun showLoader() {
-        details_progress.visibility = View.VISIBLE
-        details_container.visibility = View.GONE
-    }
-
-    private fun hideLoader() {
-        details_progress.visibility = View.GONE
-        details_container.visibility = View.VISIBLE
-    }
-
-    override fun provideLayout(): Int = R.layout.party_details
-
-    override fun provideToolbar(): Toolbar? = null
 }
