@@ -91,6 +91,5 @@ class PartyDetailsActivity : AppCompatActivity() {
             }
             Linkify.addLinks(party_organizer, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
         }
-
     }
 }

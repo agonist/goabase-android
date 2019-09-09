@@ -33,8 +33,7 @@ class CountriesActivity : AppCompatActivity(), CountryAdapter.CountryClickListen
         supportActionBar?.title = getString(R.string.countries_title)
 
         countries_recycler.setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(this)
-        countries_recycler.layoutManager = layoutManager
+        countries_recycler.layoutManager = LinearLayoutManager(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, R.color.purpleLight)

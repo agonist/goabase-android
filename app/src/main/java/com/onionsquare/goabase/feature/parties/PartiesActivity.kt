@@ -43,14 +43,13 @@ class PartiesActivity : AppCompatActivity(), PartiesAdapter.PartyClickListener {
         supportActionBar?.title = "Parties in $country"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         parties_recycler.setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(this)
-        parties_recycler.layoutManager = layoutManager
+        parties_recycler.layoutManager = LinearLayoutManager(this)
         parties_recycler.adapter = adapter
         parties_recycler.addItemDecoration(Divider(applicationContext))
     }
 
     override fun onPartySelected(party: Party) {
-        val intent: Intent = Intent(this@PartiesActivity, PartyDetailsActivity::class.java)
+        val intent = Intent(this@PartiesActivity, PartyDetailsActivity::class.java)
         intent.putExtra(PARTY_ID_EXTRA, party.id)
         startActivity(intent)
     }
