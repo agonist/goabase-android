@@ -3,29 +3,46 @@ package com.onionsquare.goabase.feature.country
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.WindowManager
-import com.onionsquare.goabase.PsyApp
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.BaseActivity
 import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.model.Country
 import kotlinx.android.synthetic.main.countries.*
+import org.koin.android.ext.android.inject
 
 
-class CountriesActivity : BaseActivity(), CountriesView {
+class CountriesActivity : BaseActivity() {
 
     companion object {
-        val COUNTRY_NAME_EXTRA = "COUNTRY_NAME"
-        val COUNTRY_ISO_EXTRA = "COUNTRY_ISO"
+        const val COUNTRY_NAME_EXTRA = "COUNTRY_NAME"
+        const val COUNTRY_ISO_EXTRA = "COUNTRY_ISO"
     }
+
+    private val viewModel: CountriesViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initUI()
 
+        viewModel.countries.observe(this, Observer { res ->
+            showCountries(res)
+        })
+
+        viewModel.loading.observe(this, Observer { isLoading ->
+            when (isLoading) {
+                false -> hideLoader()
+                true -> showLoader()
+            }
+        })
+    }
+
+    private fun initUI() {
         supportActionBar?.apply {
             title = getString(R.string.countries_title)
         }
@@ -33,14 +50,13 @@ class CountriesActivity : BaseActivity(), CountriesView {
         countries_recycler.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(this)
         countries_recycler.layoutManager = layoutManager
-        CountriesPresenter(this, PsyApp.instance.api).init()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, R.color.purpleLight)
         }
     }
 
-    override fun showCountries(countries: List<Country>) {
+    private fun showCountries(countries: List<Country>) {
         val adapter = CountryAdapter(countries, object : CountryAdapter.CountryClickListener {
             override fun onClick(country: Country) {
                 Intent(this@CountriesActivity, PartiesActivity::class.java).let {
@@ -54,12 +70,12 @@ class CountriesActivity : BaseActivity(), CountriesView {
     }
 
 
-    override fun showLoader() {
+    private fun showLoader() {
         country_progress.visibility = View.VISIBLE
         countries_recycler.visibility = View.GONE
     }
 
-    override fun hideLoader() {
+    private fun hideLoader() {
         country_progress.visibility = View.GONE
         countries_recycler.visibility = View.VISIBLE
     }

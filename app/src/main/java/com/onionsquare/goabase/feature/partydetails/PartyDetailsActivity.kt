@@ -3,32 +3,47 @@ package com.onionsquare.goabase.feature.partydetails
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
 import android.text.util.Linkify
 import android.view.View
-import com.onionsquare.goabase.PsyApp
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.BaseActivity
 import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.model.Party
 import kotlinx.android.synthetic.main.party_details.*
+import org.koin.android.ext.android.inject
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
 
-class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
+class PartyDetailsActivity : BaseActivity() {
+
+    private val viewModel: PartyDetailsViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val partyId = intent.getStringExtra(PartiesActivity.PARTY_ID_EXTRA)
-        PartyDetailsPresenter(this, PsyApp.instance.api).init(partyId)
         back_Arrow.setOnClickListener { onBackPressed() }
+
+        viewModel.loading.observe(this, Observer {
+            when (it) {
+                false -> hideLoader()
+                true -> showLoader()
+            }
+        })
+
+        viewModel.party.observe(this, Observer {
+            showPartyDetails(it)
+        })
+
+        viewModel.fetchParty(partyId)
     }
 
 
-    override fun showPartyDetails(party: Party) {
+    private fun showPartyDetails(party: Party) {
         party.apply {
             party_picture.setImageURI(urlImageFull)
             party_name.text = nameParty
@@ -54,7 +69,7 @@ class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
                 startActivity(mapIntent)
             }
 
-            if (textLineup.isNotEmpty()){
+            if (textLineup.isNotEmpty()) {
                 party_lineup.text = textLineup
                 Linkify.addLinks(party_lineup, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
             }
@@ -84,12 +99,12 @@ class PartyDetailsActivity : BaseActivity(), PartyDetailsView {
 
     }
 
-    override fun showLoader() {
+    private fun showLoader() {
         details_progress.visibility = View.VISIBLE
         details_container.visibility = View.GONE
     }
 
-    override fun hideLoader() {
+    private fun hideLoader() {
         details_progress.visibility = View.GONE
         details_container.visibility = View.VISIBLE
     }

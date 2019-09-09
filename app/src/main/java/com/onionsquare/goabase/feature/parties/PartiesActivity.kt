@@ -2,10 +2,10 @@ package com.onionsquare.goabase.feature.parties
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.Toolbar
 import android.view.View
-import com.onionsquare.goabase.PsyApp
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.BaseActivity
 import com.onionsquare.goabase.feature.Divider
@@ -13,18 +13,37 @@ import com.onionsquare.goabase.feature.country.CountriesActivity
 import com.onionsquare.goabase.feature.partydetails.PartyDetailsActivity
 import com.onionsquare.goabase.model.Party
 import kotlinx.android.synthetic.main.parties.*
+import org.koin.android.ext.android.inject
 
-class PartiesActivity : BaseActivity(), PartiesView {
+class PartiesActivity : BaseActivity() {
 
     companion object {
-        val PARTY_ID_EXTRA = "PARTY_ID"
+        const val PARTY_ID_EXTRA = "PARTY_ID"
     }
 
-    var presenter: PartiesPresenter? = null
-    var parties: ArrayList<Party>? = arrayListOf()
+    private val viewModel: PartiesViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initUI()
+
+        val country = intent.getStringExtra(CountriesActivity.COUNTRY_NAME_EXTRA)
+
+        viewModel.parties.observe(this, Observer {
+            showParties(it)
+        })
+
+        viewModel.loading.observe(this, Observer {
+            when (it) {
+                false -> hideLoader()
+                true -> showLoader()
+            }
+        })
+
+        viewModel.fetchParties(country)
+    }
+
+    private fun initUI() {
         supportActionBar?.apply {
             val country = intent.getStringExtra(CountriesActivity.COUNTRY_NAME_EXTRA)
             title = "Parties in $country"
@@ -32,19 +51,10 @@ class PartiesActivity : BaseActivity(), PartiesView {
         parties_recycler.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(this)
         parties_recycler.layoutManager = layoutManager
-        val country = intent.getStringExtra(CountriesActivity.COUNTRY_NAME_EXTRA)
         displayBackArrow(true)
-        presenter = PartiesPresenter(this, PsyApp.instance.api)
-        presenter?.init(country)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter?.end()
-    }
-
-    override fun showParties(parties: List<Party>) {
-        this.parties?.addAll(parties)
+    private fun showParties(parties: List<Party>) {
         parties_recycler.addItemDecoration(Divider(applicationContext))
         parties_recycler.adapter = PartiesAdapter(parties, object : PartiesAdapter.PartyClickListener {
             override fun onClick(party: Party) {
@@ -56,12 +66,12 @@ class PartiesActivity : BaseActivity(), PartiesView {
 
     }
 
-    override fun showLoader() {
+    private fun showLoader() {
         parties_progress.visibility = View.VISIBLE
         parties_recycler.visibility = View.GONE
     }
 
-    override fun hideLoader() {
+    private fun hideLoader() {
         parties_progress.visibility = View.GONE
         parties_recycler.visibility = View.VISIBLE
     }
