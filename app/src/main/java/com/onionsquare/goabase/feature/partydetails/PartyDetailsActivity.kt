@@ -7,6 +7,7 @@ import android.text.util.Linkify
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import coil.api.load
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.model.Party
@@ -40,14 +41,16 @@ class PartyDetailsActivity : AppCompatActivity() {
 
     private fun showPartyDetails(party: Party) {
         party.apply {
-            party_picture.setImageURI(urlImageFull)
+            party_picture.load(urlImageFull) {
+                crossfade(true)
+            }
             party_name.text = nameParty
 
             val dateStart = OffsetDateTime.parse(dateStart).toLocalDateTime()
             val dateEnd = OffsetDateTime.parse(dateEnd).toLocalDateTime()
             party_date.text = "${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateStart)} - ${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateEnd)}"
 
-            if (textLocation.length > 100) {
+            if (textLocation != "Unknnown") {
                 party_location.text = nameTown
                 location_title.visibility = View.VISIBLE
                 location_full.visibility = View.VISIBLE

@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.onionsquare.goabase.R
-import com.onionsquare.goabase.feature.Divider
 import com.onionsquare.goabase.feature.country.CountriesActivity
 import com.onionsquare.goabase.feature.partydetails.PartyDetailsActivity
 import com.onionsquare.goabase.model.Party
@@ -45,7 +44,6 @@ class PartiesActivity : AppCompatActivity(), PartiesAdapter.PartyClickListener {
         parties_recycler.setHasFixedSize(true)
         parties_recycler.layoutManager = LinearLayoutManager(this)
         parties_recycler.adapter = adapter
-        parties_recycler.addItemDecoration(Divider(applicationContext))
     }
 
     override fun onPartySelected(party: Party) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/purpleDark"
     android:elevation="0dp"
     app:cardElevation="0dp">
@@ -13,30 +13,28 @@
         android:layout_height="wrap_content"
         android:background="@color/purpleDark">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <ImageView
             android:id="@+id/party_picture"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="80dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"
-            app:failureImage="@drawable/no_picture"
-            app:failureImageScaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:placeholderImageScaleType="centerCrop" app:roundedCornerRadius="8dp"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/party_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:textColor="?attr/subtitleRegularTextColor"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/party_picture"
-            app:layout_constraintTop_toTopOf="@+id/party_picture" tools:text="Sep 30, 2018 6pm"/>
+            app:layout_constraintTop_toTopOf="@+id/party_picture"
+            tools:text="Sep 30, 2018 6pm" />
+
         <TextView
             android:id="@+id/party_name"
             android:layout_width="0dp"
@@ -50,17 +48,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/party_picture"
             app:layout_constraintTop_toBottomOf="@+id/party_date"
-            tools:text="Modem Festival"/>
+            tools:text="Modem Festival" />
+
         <TextView
             android:id="@+id/party_country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:textColor="?attr/regularTextColor"
+            app:layout_constraintBottom_toBottomOf="@+id/party_location_icon"
             app:layout_constraintStart_toEndOf="@+id/party_location_icon"
-            app:layout_constraintTop_toBottomOf="@+id/party_name"
-            tools:text="Croatia"/>
+            app:layout_constraintTop_toTopOf="@+id/party_location_icon"
+            tools:text="Croatia" />
 
         <ImageView
             android:id="@+id/party_location_icon"
@@ -69,18 +68,36 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:adjustViewBounds="true"
+            android:tint="@color/flashyYellow"
             app:layout_constraintStart_toEndOf="@+id/party_picture"
             app:layout_constraintTop_toBottomOf="@+id/party_name"
-            app:srcCompat="@drawable/ic_place_black_24dp"/>
+            app:srcCompat="@drawable/ic_place_black_24dp" />
+
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:tint="@color/alienGreen"
             app:layout_constraintBottom_toBottomOf="@+id/party_picture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/party_picture"
-            app:srcCompat="@drawable/ic_chevron_right_black_24dp"/>
+            app:srcCompat="@drawable/ic_chevron_right_black_24dp" />
+
+        <LinearLayout
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:alpha="0.5"
+            android:background="@android:color/darker_gray"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/party_picture" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

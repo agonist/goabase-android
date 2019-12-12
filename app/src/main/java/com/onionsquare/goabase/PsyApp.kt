@@ -1,7 +1,6 @@
 package com.onionsquare.goabase
 
 import android.app.Application
-import com.facebook.drawee.backends.pipeline.Fresco
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.onionsquare.goabase.feature.country.CountriesViewModel
 import com.onionsquare.goabase.feature.parties.PartiesViewModel
@@ -20,7 +19,6 @@ class PsyApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Fresco.initialize(this)
         AndroidThreeTen.init(this)
         setupKoin()
     }

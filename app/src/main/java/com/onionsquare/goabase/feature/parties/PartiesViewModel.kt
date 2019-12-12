@@ -24,7 +24,9 @@ class PartiesViewModel(private val api: GoaBaseApi, val ioSheduler: Scheduler,
                 .subscribe({
                     loading.value = false
                     parties.value = it.parties
-                }, {})
+                }, {
+
+                })
         )
     }
 

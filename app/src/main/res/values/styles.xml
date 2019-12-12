@@ -21,13 +21,9 @@
 
 
     <style name="GreenTitleTv" parent="TextAppearance.AppCompat">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?attr/greyTextColor</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingTop">32dp</item>
-        <item name="android:paddingBottom">4dp</item>
-        <item name="android:background">@color/spaceBlue</item>
     </style>
 
     <style name="WhiteContentTv" parent="TextAppearance.AppCompat">

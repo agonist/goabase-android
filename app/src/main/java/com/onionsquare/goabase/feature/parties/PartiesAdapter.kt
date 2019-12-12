@@ -3,12 +3,12 @@ package com.onionsquare.goabase.feature.parties
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.facebook.drawee.view.SimpleDraweeView
+import coil.api.load
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.model.Party
+import kotlinx.android.synthetic.main.party_item.view.*
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -34,22 +34,20 @@ class PartiesAdapter(val items: ArrayList<Party>, val listener: PartyClickListen
 
     class PartyViewHolder(itemView: View, val listener: PartyClickListener) : RecyclerView.ViewHolder(itemView) {
 
-        val partyName = itemView.findViewById<TextView>(R.id.party_name)
-        val partyPicture = itemView.findViewById<SimpleDraweeView>(R.id.party_picture)
-        val partyDate = itemView.findViewById<TextView>(R.id.party_date)
-        val partyCountry = itemView.findViewById<TextView>(R.id.party_country)
-
         fun bind(party: Party) {
-            partyName.text = party.nameParty
-            partyCountry.text = " ${party.nameTown}"
-
             val date = OffsetDateTime.parse(party.dateStart).toLocalDateTime()
             val txt = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(date)
-            partyDate.text = txt
-            partyPicture.setImageURI(party.urlImageMedium)
 
-            itemView.setOnClickListener {
-                listener.onPartySelected(party)
+            itemView.apply {
+                party_name.text = party.nameParty
+                party_country.text = " ${party.nameTown}"
+                party_date.text = txt
+                party_picture.load(party.urlImageMedium){
+                    crossfade(true)
+                }
+                setOnClickListener {
+                    listener.onPartySelected(party)
+                }
             }
         }
     }
