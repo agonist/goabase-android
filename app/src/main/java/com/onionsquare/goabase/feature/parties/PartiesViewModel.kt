@@ -1,37 +1,26 @@
 package com.onionsquare.goabase.feature.parties
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.network.GoaBaseApi
-import io.reactivex.Scheduler
-import io.reactivex.disposables.CompositeDisposable
 
-class PartiesViewModel(private val api: GoaBaseApi, val ioSheduler: Scheduler,
-                       val mainScheduler: Scheduler) : ViewModel() {
+class PartiesViewModel(private val api: GoaBaseApi) : ViewModel() {
 
+    private val countryLiveData = MutableLiveData<String>()
 
-    val parties: MutableLiveData<List<Party>> = MutableLiveData()
+    val parties: LiveData<List<Party>> = Transformations.switchMap(countryLiveData, this::fetchParties)
     val loading: MutableLiveData<Boolean> = MutableLiveData(false)
-    private val disposable: CompositeDisposable = CompositeDisposable()
 
-
-    fun fetchParties(country: String) {
-        disposable.add(api.getPartiesByCountry(country)
-                .subscribeOn(ioSheduler)
-                .observeOn(mainScheduler)
-                .doOnSubscribe { loading.value = true }
-                .subscribe({
-                    loading.value = false
-                    parties.value = it.parties
-                }, {
-
-                })
-        )
+    private fun fetchParties(country: String): LiveData<List<Party>> {
+        return liveData {
+            loading.value = true
+            val parties = api.getPartiesByCountry(country).parties
+            emit(parties)
+            loading.value = false
+        }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        disposable.dispose()
+    fun setCountry(country: String) {
+        countryLiveData.value = country
     }
 }

@@ -1,35 +1,26 @@
 package com.onionsquare.goabase.feature.partydetails
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.network.GoaBaseApi
-import io.reactivex.Scheduler
-import io.reactivex.disposables.CompositeDisposable
 
-class PartyDetailsViewModel(private val api: GoaBaseApi, val ioSheduler: Scheduler,
-                            val mainScheduler: Scheduler): ViewModel() {
+class PartyDetailsViewModel(private val api: GoaBaseApi) : ViewModel() {
 
-    val party: MutableLiveData<Party> = MutableLiveData()
+    private val partyIdLiveData = MutableLiveData<String>()
+
+    val party: LiveData<Party> = Transformations.switchMap(partyIdLiveData, this::fetchPartyDetails)
     val loading: MutableLiveData<Boolean> = MutableLiveData(false)
-    private val disposable: CompositeDisposable = CompositeDisposable()
 
-
-
-    fun fetchParty(id: String) {
-        disposable.add(api.getParty(id)
-                .subscribeOn(ioSheduler)
-                .observeOn(mainScheduler)
-                .doOnSubscribe { loading.value = true }
-                .subscribe({
-                    loading.value = false
-                    party.value = it.party
-                }, {})
-        )
+    private fun fetchPartyDetails(partyId: String): LiveData<Party> {
+        return liveData {
+            loading.value = true
+            val party = api.getParty(partyId).party
+            emit(party)
+            loading.value = false
+        }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        disposable.dispose()
+    fun setPartyId(partyId: String) {
+        partyIdLiveData.value = partyId
     }
 }

@@ -35,15 +35,22 @@ class PartyDetailsActivity : AppCompatActivity() {
             showPartyDetails(it)
         })
 
-        viewModel.fetchParty(partyId)
+        viewModel.setPartyId(partyId)
     }
 
 
     private fun showPartyDetails(party: Party) {
         party.apply {
-            party_picture.load(urlImageFull) {
-                crossfade(true)
+
+            urlImageFull?.let {
+                party_picture.load(urlImageFull) {
+                    crossfade(true)
+                    error(R.drawable.rick)
+                }
+            } ?: kotlin.run {
+                party_picture.setImageDrawable(getDrawable(R.drawable.rick))
             }
+
             party_name.text = nameParty
 
             val dateStart = OffsetDateTime.parse(dateStart).toLocalDateTime()

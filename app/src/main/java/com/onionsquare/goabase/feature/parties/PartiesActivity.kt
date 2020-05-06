@@ -33,7 +33,7 @@ class PartiesActivity : AppCompatActivity(), PartiesAdapter.PartyClickListener {
         viewModel.parties.observe(this, adapter)
         viewModel.loading.observe(this, LoadingObserver(parties_progress, parties_recycler))
 
-        viewModel.fetchParties(country)
+        viewModel.setCountry(country)
     }
 
     private fun initUI() {

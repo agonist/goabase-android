@@ -42,8 +42,13 @@ class PartiesAdapter(val items: ArrayList<Party>, val listener: PartyClickListen
                 party_name.text = party.nameParty
                 party_country.text = " ${party.nameTown}"
                 party_date.text = txt
-                party_picture.load(party.urlImageMedium){
-                    crossfade(true)
+                party.urlImageMedium?.let {
+                    party_picture.load(party.urlImageMedium){
+                        crossfade(true)
+                        error(R.drawable.no_picture)
+                    }
+                }?: kotlin.run {
+                    party_picture.setImageDrawable(itemView.context.getDrawable(R.drawable.no_picture))
                 }
                 setOnClickListener {
                     listener.onPartySelected(party)
