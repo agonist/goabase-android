@@ -1,31 +1,39 @@
 package com.onionsquare.goabase.feature.partydetails
 
 import androidx.lifecycle.Observer
-import com.onionsquare.DumbApiRepository
-import com.onionsquare.goabase.BaseTest
+import com.onionsquare.goabase.BaseViewModelTest
 import com.onionsquare.goabase.model.Party
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.inject
+import org.koin.core.module.Module
+import org.koin.dsl.module
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 @ExperimentalCoroutinesApi
-class PartyDetailsViewModelTest : BaseTest() {
+class PartyDetailsViewModelViewModelTest : BaseViewModelTest() {
 
-    lateinit var viewModel: PartyDetailsViewModel
+    val viewModel: PartyDetailsViewModel by inject()
 
     @Mock
     lateinit var partyObserver: Observer<Party>
 
+    override fun providesKoinModules(): Module {
+        return module {
+            factory { PartyDetailsRepository(get()) }
+            viewModel { PartyDetailsViewModel(get()) }
+        }
+    }
+
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-
-        viewModel = PartyDetailsViewModel(PartyDetailsRepository(DumbApiRepository()))
 
         viewModel.loading.observeForever(loadingObserver)
         viewModel.party.observeForever(partyObserver)
@@ -44,6 +52,5 @@ class PartyDetailsViewModelTest : BaseTest() {
 
     private fun partyArgumentCaptor(): ArgumentCaptor<Party> =
             ArgumentCaptor.forClass(Party::class.java)
-
 
 }

@@ -1,32 +1,39 @@
 package com.onionsquare.goabase.feature.parties
 
 import androidx.lifecycle.Observer
-import com.onionsquare.DumbApiRepository
-import com.onionsquare.goabase.BaseTest
-import com.onionsquare.goabase.model.Country
+import com.onionsquare.goabase.BaseViewModelTest
 import com.onionsquare.goabase.model.Party
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.Module
+import org.koin.dsl.module
+import org.koin.test.inject
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 @ExperimentalCoroutinesApi
-class PartiesViewModelTest : BaseTest() {
-
-    lateinit var viewModel: PartiesViewModel
+class PartiesViewModelViewModelTest : BaseViewModelTest() {
 
     @Mock
     lateinit var partiesObserver: Observer<List<Party>>
 
+    private val viewModel: PartiesViewModel by inject()
+
+    override fun providesKoinModules(): Module {
+        return module {
+            factory { PartiesRepository(get()) }
+            viewModel { PartiesViewModel(get()) }
+        }
+    }
+
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-
-        viewModel = PartiesViewModel(PartiesRepository(DumbApiRepository()))
 
         viewModel.loading.observeForever(loadingObserver)
         viewModel.parties.observeForever(partiesObserver)
