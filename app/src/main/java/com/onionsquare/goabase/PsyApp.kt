@@ -4,6 +4,7 @@ import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.onionsquare.goabase.feature.country.CountriesRepository
 import com.onionsquare.goabase.feature.country.CountriesViewModel
+import com.onionsquare.goabase.feature.parties.PartiesRepository
 import com.onionsquare.goabase.feature.parties.PartiesViewModel
 import com.onionsquare.goabase.feature.partydetails.PartyDetailsViewModel
 import com.onionsquare.goabase.network.goabaseeNetworkModule
@@ -21,7 +22,7 @@ class PsyApp : Application() {
 
     val goabaseModule = module {
         viewModel { CountriesViewModel(CountriesRepository(get())) }
-        viewModel { PartiesViewModel(get()) }
+        viewModel { PartiesViewModel(PartiesRepository(get())) }
         viewModel { PartyDetailsViewModel(get()) }
     }
 

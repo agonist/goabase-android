@@ -2,25 +2,25 @@ package com.onionsquare.goabase.feature.parties
 
 import androidx.lifecycle.*
 import com.onionsquare.goabase.model.Party
-import com.onionsquare.goabase.network.GoaBaseApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 
-class PartiesViewModel(private val api: GoaBaseApi) : ViewModel() {
+@ExperimentalCoroutinesApi
+class PartiesViewModel(val partiesRepository: PartiesRepository) : ViewModel() {
 
     private val countryLiveData = MutableLiveData<String>()
+    val loading: MutableLiveData<Boolean> = MutableLiveData()
 
     val parties: LiveData<List<Party>> = Transformations.switchMap(countryLiveData, this::fetchParties)
-    val loading: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    private fun fetchParties(country: String): LiveData<List<Party>> {
-        return liveData {
-            loading.value = true
-            val parties = api.getPartiesByCountry(country).parties
-            emit(parties)
-            loading.value = false
-        }
-    }
+    private fun fetchParties(country: String): LiveData<List<Party>> =
+            partiesRepository.getPartiesByCountry(country)
+                    .onStart { loading.value = true }
+                    .onCompletion { loading.value = false }
+                    .asLiveData()
 
     fun setCountry(country: String) {
-        countryLiveData.value = country
+        countryLiveData.postValue(country)
     }
 }

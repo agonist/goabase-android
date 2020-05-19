@@ -1,59 +1,55 @@
-package com.onionsquare.goabase.feature.country
+package com.onionsquare.goabase.feature.parties
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.onionsquare.DumbApiRepository
 import com.onionsquare.goabase.BaseTest
 import com.onionsquare.goabase.model.Country
+import com.onionsquare.goabase.model.Party
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.assertj.core.api.Assertions
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
-
 @ExperimentalCoroutinesApi
-class CountriesViewModelTest: BaseTest() {
+class PartiesViewModelTest : BaseTest() {
 
-    lateinit var viewModel: CountriesViewModel
+    lateinit var viewModel: PartiesViewModel
 
     @Mock
-    lateinit var countriesObserver: Observer<List<Country>>
+    lateinit var partiesObserver: Observer<List<Party>>
 
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
 
-        viewModel = CountriesViewModel(CountriesRepository(DumbApiRepository()))
+        viewModel = PartiesViewModel(PartiesRepository(DumbApiRepository()))
 
         viewModel.loading.observeForever(loadingObserver)
-        viewModel.countries.observeForever(countriesObserver)
+        viewModel.parties.observeForever(partiesObserver)
     }
 
     @Test
-    fun `test get countries list`() {
+    fun `test get parties by country`() {
+
+        viewModel.setCountry("FR")
+
         verifyLoading(2, booleanArrayOf(true, false))
-        verifyCountriesSize(4)
-        //party count sort already tested in repository test
+        verifyPartiesSize(3)
     }
 
-
-    private fun listArgumentCaptor(): ArgumentCaptor<List<Country>> {
-        val list: List<Country> = listOf()
+    private fun listArgumentCaptor(): ArgumentCaptor<List<Party>> {
+        val list: List<Party> = listOf()
         return ArgumentCaptor.forClass(list::class.java)
     }
 
-    private fun verifyCountriesSize(count: Int) {
+    private fun verifyPartiesSize(count: Int) {
         listArgumentCaptor().run {
-            Mockito.verify(countriesObserver, Mockito.times(1)).onChanged(capture())
+            Mockito.verify(partiesObserver, Mockito.times(1)).onChanged(capture())
             Assertions.assertThat(allValues[0].size).isEqualTo(count)
         }
     }
-
-
 }

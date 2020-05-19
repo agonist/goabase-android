@@ -1,12 +1,9 @@
 package com.onionsquare
 
-import com.onionsquare.goabase.model.Countries
-import com.onionsquare.goabase.model.Country
-import com.onionsquare.goabase.model.Parties
-import com.onionsquare.goabase.model.PartyReply
+import com.onionsquare.goabase.model.*
 import com.onionsquare.goabase.network.GoaBaseApi
 
-class DumbApiRepository: GoaBaseApi {
+class DumbApiRepository : GoaBaseApi {
 
     override suspend fun getCountries(country: String): Countries {
         return Countries(
@@ -20,7 +17,22 @@ class DumbApiRepository: GoaBaseApi {
     }
 
     override suspend fun getPartiesByCountry(country: String): Parties {
-        TODO("Not yet implemented")
+
+        val francePatrties = listOf<Party>(
+                Party("", "mont-dor", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+                Party("", "comte", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+                Party("", "raclette", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+        )
+
+        val italyParties = listOf<Party>(
+                Party("", "pizza", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+        )
+
+        return when (country) {
+            "FR" -> Parties(francePatrties)
+            "IT" -> Parties(italyParties)
+            else -> Parties(listOf())
+        }
     }
 
     override suspend fun getParty(id: String): PartyReply {

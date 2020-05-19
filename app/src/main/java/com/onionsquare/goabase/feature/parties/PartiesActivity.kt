@@ -12,9 +12,11 @@ import com.onionsquare.goabase.feature.partydetails.PartyDetailsActivity
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.ui.LoadingObserver
 import kotlinx.android.synthetic.main.parties.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@ExperimentalCoroutinesApi
 class PartiesActivity : AppCompatActivity(R.layout.parties), PartiesAdapter.PartyClickListener {
 
     companion object {
