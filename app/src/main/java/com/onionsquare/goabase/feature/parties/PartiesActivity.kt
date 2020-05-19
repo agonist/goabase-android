@@ -13,19 +13,19 @@ import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.ui.LoadingObserver
 import kotlinx.android.synthetic.main.parties.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PartiesActivity : AppCompatActivity(), PartiesAdapter.PartyClickListener {
+class PartiesActivity : AppCompatActivity(R.layout.parties), PartiesAdapter.PartyClickListener {
 
     companion object {
         const val PARTY_ID_EXTRA = "PARTY_ID"
     }
 
-    private val viewModel: PartiesViewModel by inject()
+    private val viewModel: PartiesViewModel by viewModel()
     private val adapter = PartiesAdapter(arrayListOf(), this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.parties)
         initUI()
 
         val country = intent.getStringExtra(CountriesActivity.COUNTRY_NAME_EXTRA)

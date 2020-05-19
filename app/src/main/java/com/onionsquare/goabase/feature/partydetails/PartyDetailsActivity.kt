@@ -13,19 +13,18 @@ import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.ui.LoadingObserver
 import kotlinx.android.synthetic.main.party_details.*
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
 
-class PartyDetailsActivity : AppCompatActivity() {
+class PartyDetailsActivity() : AppCompatActivity(R.layout.party_details) {
 
-    private val viewModel: PartyDetailsViewModel by inject()
+    private val viewModel: PartyDetailsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.party_details)
         val partyId = intent.getStringExtra(PartiesActivity.PARTY_ID_EXTRA)
         back_Arrow.setOnClickListener { onBackPressed() }
 

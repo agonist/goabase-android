@@ -3,20 +3,20 @@ package com.onionsquare.goabase.feature.country
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.asLiveData
 import com.onionsquare.goabase.model.Country
-import com.onionsquare.goabase.network.GoaBaseApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 
+@ExperimentalCoroutinesApi
+class CountriesViewModel(countriesRepository: CountriesRepository) : ViewModel() {
 
-class CountriesViewModel(private val api: GoaBaseApi) : ViewModel() {
+    val loading: MutableLiveData<Boolean> = MutableLiveData()
 
-    val loading: MutableLiveData<Boolean> = MutableLiveData(false)
-
-    val countries: LiveData<List<Country>> = liveData {
-        loading.value = true
-        val countries = api.getCountries("list-all")
-        val sortedCountries = countries.countries.sortedBy { it.numParties.toInt() }.asReversed()
-        emit(sortedCountries)
-        loading.value = false
-    }
+    val countries: LiveData<List<Country>> = countriesRepository.listAllCountriesSortedByPartiesAmount()
+            .onStart { loading.value = true }
+            .onCompletion { loading.value = false }
+            .asLiveData()
 }
+

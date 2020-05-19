@@ -2,9 +2,16 @@ package com.onionsquare.goabase.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
+val goabaseeNetworkModule = module {
+    single { provideDefaultOkhttpClient() }
+    single { provideRetrofit(get()) }
+    single { provideGoabaseService(get()) }
+}
 
 fun provideDefaultOkhttpClient(): OkHttpClient {
     return OkHttpClient.Builder()
