@@ -2,8 +2,8 @@ package com.onionsquare.goabase
 
 import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.onionsquare.goabase.feature.country.CountriesRepository
-import com.onionsquare.goabase.feature.country.CountriesViewModel
+import com.onionsquare.goabase.feature.countries.CountriesRepository
+import com.onionsquare.goabase.feature.countries.CountriesViewModel
 import com.onionsquare.goabase.feature.parties.PartiesRepository
 import com.onionsquare.goabase.feature.parties.PartiesViewModel
 import com.onionsquare.goabase.feature.partydetails.PartyDetailsRepository

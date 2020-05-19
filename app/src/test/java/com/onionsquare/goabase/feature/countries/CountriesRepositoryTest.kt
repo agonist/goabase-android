@@ -1,4 +1,4 @@
-package com.onionsquare.goabase.feature.country
+package com.onionsquare.goabase.feature.countries
 
 import com.onionsquare.DumbApiRepository
 import com.onionsquare.goabase.GoabaseException

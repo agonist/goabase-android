@@ -1,44 +1,48 @@
-package com.onionsquare.goabase.feature.country
+package com.onionsquare.goabase.feature.countries
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.onionsquare.goabase.R
+import com.onionsquare.goabase.databinding.ActivityCountriesBinding
 import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Country
 import com.onionsquare.goabase.visible
-import kotlinx.android.synthetic.main.countries.*
+import kotlinx.android.synthetic.main.activity_countries.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 @ExperimentalCoroutinesApi
-class CountriesActivity : AppCompatActivity(R.layout.countries), CountryAdapter.CountryClickListener {
+class CountriesActivity : AppCompatActivity(), CountryAdapter.CountryClickListener {
 
     companion object {
         const val COUNTRY_NAME_EXTRA = "COUNTRY_NAME"
         const val COUNTRY_ISO_EXTRA = "COUNTRY_ISO"
     }
 
+
     private val viewModel: CountriesViewModel by viewModel()
     private val adapter: CountryAdapter = CountryAdapter(arrayListOf(), this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val binding: ActivityCountriesBinding = DataBindingUtil.setContentView(this, R.layout.activity_countries)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        //setContentView(view)
+
         setSupportActionBar(custom_toolbar as Toolbar)
         supportActionBar?.title = getString(R.string.countries_title)
 
         countries_recycler.setHasFixedSize(true)
         countries_recycler.layoutManager = LinearLayoutManager(this)
         countries_recycler.adapter = adapter
-
-        retry_button.setOnClickListener {
-            viewModel.getCountriesAll()
-        }
 
         observeViewModel()
         viewModel.getCountriesAll()

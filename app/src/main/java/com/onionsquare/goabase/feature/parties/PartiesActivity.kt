@@ -7,13 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.onionsquare.goabase.R
-import com.onionsquare.goabase.feature.country.CountriesActivity
+import com.onionsquare.goabase.feature.countries.CountriesActivity
 import com.onionsquare.goabase.feature.partydetails.PartyDetailsActivity
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.ui.LoadingObserver
 import kotlinx.android.synthetic.main.parties.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ExperimentalCoroutinesApi

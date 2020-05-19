@@ -1,4 +1,4 @@
-package com.onionsquare.goabase.feature.country
+package com.onionsquare.goabase.feature.countries
 
 import com.onionsquare.goabase.BaseRepository
 import com.onionsquare.goabase.Result

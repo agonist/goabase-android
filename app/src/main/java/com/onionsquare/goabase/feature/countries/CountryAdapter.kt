@@ -1,4 +1,4 @@
-package com.onionsquare.goabase.feature.country
+package com.onionsquare.goabase.feature.countries
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater

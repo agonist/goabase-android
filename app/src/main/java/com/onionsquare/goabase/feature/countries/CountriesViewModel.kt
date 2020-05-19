@@ -1,4 +1,4 @@
-package com.onionsquare.goabase.feature.country
+package com.onionsquare.goabase.feature.countries
 
 import androidx.lifecycle.*
 import com.hadilq.liveevent.LiveEvent
@@ -20,8 +20,9 @@ class CountriesViewModel(private val countriesRepository: CountriesRepository) :
 
     val error = LiveEvent<String>()
 
-    fun getCountriesAll(countriesParams: String = "list-all") {
-        fetchCountries(countriesParams)
+
+    fun getCountriesAll() {
+        fetchCountries("list-all")
     }
 
     private fun fetchCountries(countriesParams: String) {

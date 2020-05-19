@@ -1,4 +1,4 @@
-package com.onionsquare.goabase.feature.country
+package com.onionsquare.goabase.feature.countries
 
 import androidx.lifecycle.Observer
 import com.onionsquare.goabase.BaseViewModelTest
@@ -54,7 +54,7 @@ class CountriesViewModelViewModelTest : BaseViewModelTest() {
     }
 
 //    @Test
-//    fun `get countries list error`() {
+//    fun `get activity_countries list error`() {
 //        viewModel.getCountriesAll("err")
 //        verifyCountriesStateError()
 //    }
