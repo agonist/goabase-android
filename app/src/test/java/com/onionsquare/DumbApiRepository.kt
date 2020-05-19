@@ -5,6 +5,16 @@ import com.onionsquare.goabase.network.GoaBaseApi
 
 class DumbApiRepository : GoaBaseApi {
 
+    val francePatrties = arrayListOf<Party>(
+            Party("1", "mont-dor", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+            Party("2", "comte", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
+            Party("3", "raclette", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+    )
+
+    val italyParties = arrayListOf<Party>(
+            Party("4", "pizza", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
+    )
+
     override suspend fun getCountries(country: String): Countries {
         return Countries(
                 listOf(
@@ -17,17 +27,6 @@ class DumbApiRepository : GoaBaseApi {
     }
 
     override suspend fun getPartiesByCountry(country: String): Parties {
-
-        val francePatrties = listOf<Party>(
-                Party("", "mont-dor", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
-                Party("", "comte", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""),
-                Party("", "raclette", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
-        )
-
-        val italyParties = listOf<Party>(
-                Party("", "pizza", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
-        )
-
         return when (country) {
             "FR" -> Parties(francePatrties)
             "IT" -> Parties(italyParties)
@@ -36,6 +35,10 @@ class DumbApiRepository : GoaBaseApi {
     }
 
     override suspend fun getParty(id: String): PartyReply {
-        TODO("Not yet implemented")
+        val l = arrayListOf<Party>()
+        l.addAll(francePatrties)
+        l.addAll(italyParties)
+
+        return PartyReply(l.find { it.id == id }!!)
     }
 }

@@ -20,7 +20,7 @@ class PartiesRepositoryTest {
     }
 
     @Test
-    fun getPartiesByCountry() = runBlockingTest {
+    fun `get parties by country`() = runBlockingTest {
 
         partiesRepository.getPartiesByCountry("FR").collect { res ->
             assertThat(res.size, `is`(3))
