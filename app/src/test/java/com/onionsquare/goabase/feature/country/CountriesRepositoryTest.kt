@@ -1,11 +1,11 @@
 package com.onionsquare.goabase.feature.country
 
 import com.onionsquare.DumbApiRepository
+import com.onionsquare.goabase.GoabaseException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
@@ -20,13 +20,27 @@ class CountriesRepositoryTest {
     }
 
     @Test
-    fun `test countries are sorted by parties number`() = runBlockingTest {
+    fun `countries are sorted by parties number ok`() = runBlockingTest {
+        countriesRepository.listAllCountriesSortedByPartiesAmount("list-all").collect { res ->
+            when (res) {
+                is CountriesData.Success -> {
+                    assertThat(res.countries[0].isoCountry).isEqualTo("IT")
+                    assertThat(res.countries[1].isoCountry).isEqualTo("FR")
+                    assertThat(res.countries[2].isoCountry).isEqualTo("DE")
+                    assertThat(res.countries[3].isoCountry).isEqualTo("TH")
+                }
+            }
+        }
+    }
 
-        countriesRepository.listAllCountriesSortedByPartiesAmount().collect { res ->
-            assertThat(res[0].isoCountry, `is`("IT"))
-            assertThat(res[1].isoCountry, `is`("FR"))
-            assertThat(res[2].isoCountry, `is`("DE"))
-            assertThat(res[3].isoCountry, `is`("TH"))
+    @Test
+    fun `countries are sorted by parties number not ok`() = runBlockingTest {
+        countriesRepository.listAllCountriesSortedByPartiesAmount("error").collect { res ->
+            when (res) {
+                is CountriesData.Error -> {
+                    assertThat(res.e::class.java).isEqualTo(GoabaseException::class.java)
+                }
+            }
         }
     }
 }

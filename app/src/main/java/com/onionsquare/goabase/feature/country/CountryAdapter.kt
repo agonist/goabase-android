@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.heetch.countrypicker.Utils
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.model.Country
 import kotlinx.android.synthetic.main.country_item.view.*
 
-class CountryAdapter(private val items: ArrayList<Country>, private val listener: CountryClickListener) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>(), Observer<List<Country>> {
+class CountryAdapter(private val items: ArrayList<Country>, private val listener: CountryClickListener) : RecyclerView.Adapter<CountryAdapter.CountryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountryViewHolder {
         return CountryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.country_item, parent, false), listener)
@@ -24,7 +23,7 @@ class CountryAdapter(private val items: ArrayList<Country>, private val listener
         holder.bind(items[position])
     }
 
-    override fun onChanged(countries: List<Country>) {
+    fun updateData(countries: List<Country>) {
         items.clear()
         items.addAll(countries)
         notifyDataSetChanged()

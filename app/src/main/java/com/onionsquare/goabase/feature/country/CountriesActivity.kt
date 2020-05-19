@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.parties.PartiesActivity
+import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Country
-import com.onionsquare.goabase.ui.LoadingObserver
+import com.onionsquare.goabase.visible
 import kotlinx.android.synthetic.main.countries.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -33,12 +35,55 @@ class CountriesActivity : AppCompatActivity(R.layout.countries), CountryAdapter.
         countries_recycler.setHasFixedSize(true)
         countries_recycler.layoutManager = LinearLayoutManager(this)
         countries_recycler.adapter = adapter
+
+        retry_button.setOnClickListener {
+            viewModel.getCountriesAll()
+        }
+
         observeViewModel()
+        viewModel.getCountriesAll()
     }
 
     private fun observeViewModel() {
-        viewModel.countries.observe(this, adapter)
-        viewModel.loading.observe(this, LoadingObserver(country_progress, countries_recycler))
+        viewModel.countries.observe(this, Observer {
+            refreshData(it)
+        })
+
+        viewModel.loading.observe(this, Observer {
+            when (it) {
+                true -> showLoadingState()
+                false -> hideLoadingState()
+            }
+        })
+
+        viewModel.error.observe(this, Observer {
+            showErrorState()
+        })
+    }
+
+    private fun refreshData(countries: List<Country>) {
+        hideErrorState()
+        hideLoadingState()
+        adapter.updateData(countries)
+    }
+
+    private fun showLoadingState() {
+        hideErrorState()
+        countries_recycler.gone()
+        country_progress.visible()
+    }
+
+    private fun hideLoadingState() {
+        countries_recycler.visible()
+        country_progress.gone()
+    }
+
+    private fun showErrorState() {
+        error_view.visible()
+    }
+
+    private fun hideErrorState() {
+        error_view.gone()
     }
 
     override fun onCountrySelected(country: Country) {

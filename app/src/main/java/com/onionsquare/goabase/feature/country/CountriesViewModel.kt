@@ -1,22 +1,41 @@
 package com.onionsquare.goabase.feature.country
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
+import com.hadilq.liveevent.LiveEvent
 import com.onionsquare.goabase.model.Country
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
-class CountriesViewModel(countriesRepository: CountriesRepository) : ViewModel() {
+class CountriesViewModel(private val countriesRepository: CountriesRepository) : ViewModel() {
 
-    val loading: MutableLiveData<Boolean> = MutableLiveData()
+    private val _countries = MutableLiveData<List<Country>>()
+    val countries: LiveData<List<Country>> = Transformations.map(_countries) { res -> res }
 
-    val countries: LiveData<List<Country>> = countriesRepository.listAllCountriesSortedByPartiesAmount()
-            .onStart { loading.value = true }
-            .onCompletion { loading.value = false }
-            .asLiveData()
+    private val _loading = MutableLiveData<Boolean>()
+    val loading = Transformations.map(_loading) { res -> res }
+
+    val error = LiveEvent<String>()
+
+    fun getCountriesAll(countriesParams: String = "list-all") {
+        fetchCountries(countriesParams)
+    }
+
+    private fun fetchCountries(countriesParams: String) {
+        viewModelScope.launch {
+            countriesRepository.listAllCountriesSortedByPartiesAmount(countriesParams)
+                    .onStart { _loading.value = true }
+                    .onCompletion { _loading.value = false }
+                    .collect { res ->
+                        when (res) {
+                            is CountriesData.Success -> _countries.value = res.countries
+                            is CountriesData.Error -> error.value = "Unexpected error"
+                        }
+                    }
+        }
+    }
 }
 
