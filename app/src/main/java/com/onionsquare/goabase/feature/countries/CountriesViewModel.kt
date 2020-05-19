@@ -20,7 +20,6 @@ class CountriesViewModel(private val countriesRepository: CountriesRepository) :
 
     val error = LiveEvent<String>()
 
-
     fun getCountriesAll() {
         fetchCountries("list-all")
     }

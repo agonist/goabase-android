@@ -1,26 +1,40 @@
 package com.onionsquare.goabase.feature.parties
 
 import androidx.lifecycle.*
+import com.hadilq.liveevent.LiveEvent
 import com.onionsquare.goabase.model.Party
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class PartiesViewModel(val partiesRepository: PartiesRepository) : ViewModel() {
 
-    private val countryLiveData = MutableLiveData<String>()
-    val loading: MutableLiveData<Boolean> = MutableLiveData()
+    private val _loading = MutableLiveData<Boolean>()
+    val loading = Transformations.map(_loading) { res -> res }
 
-    val parties: LiveData<List<Party>> = Transformations.switchMap(countryLiveData, this::fetchParties)
+    private val _parties = MutableLiveData<List<Party>>()
+    val parties: LiveData<List<Party>> = Transformations.map(_parties) { res -> res }
 
-    private fun fetchParties(country: String): LiveData<List<Party>> =
+    val error = LiveEvent<String>()
+
+    private fun fetchParties(country: String) {
+        viewModelScope.launch {
             partiesRepository.getPartiesByCountry(country)
-                    .onStart { loading.value = true }
-                    .onCompletion { loading.value = false }
-                    .asLiveData()
+                    .onStart { _loading.value = true }
+                    .onCompletion { _loading.value = false }
+                    .collect { res ->
+                        when (res) {
+                            is PartiesData.Success -> _parties.value = res.countries
+                            is PartiesData.Error -> error.value = "Unexpected error"
+                        }
+                    }
+        }
+    }
 
-    fun setCountry(country: String) {
-        countryLiveData.postValue(country)
+    fun getPartiesByCountry(country: String) {
+        fetchParties(country)
     }
 }

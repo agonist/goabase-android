@@ -26,7 +26,6 @@ class CountriesActivity : AppCompatActivity(), CountryAdapter.CountryClickListen
         const val COUNTRY_ISO_EXTRA = "COUNTRY_ISO"
     }
 
-
     private val viewModel: CountriesViewModel by viewModel()
     private val adapter: CountryAdapter = CountryAdapter(arrayListOf(), this)
 
@@ -35,7 +34,6 @@ class CountriesActivity : AppCompatActivity(), CountryAdapter.CountryClickListen
         val binding: ActivityCountriesBinding = DataBindingUtil.setContentView(this, R.layout.activity_countries)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        //setContentView(view)
 
         setSupportActionBar(custom_toolbar as Toolbar)
         supportActionBar?.title = getString(R.string.countries_title)
