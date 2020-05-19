@@ -17,6 +17,6 @@ interface GoaBaseApi {
     suspend fun getPartiesByCountry(@Query("country") country: String): Response<Parties>
 
     @GET("/api/party/json/{id}")
-    suspend fun getParty(@Path("id") id: String): PartyReply
+    suspend fun getParty(@Path("id") id: String): Response<PartyReply>
 
 }

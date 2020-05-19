@@ -10,16 +10,19 @@ import androidx.lifecycle.Observer
 import coil.api.load
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.parties.PartiesActivity
+import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Party
-import com.onionsquare.goabase.ui.LoadingObserver
-import kotlinx.android.synthetic.main.party_details.*
+import com.onionsquare.goabase.visible
+import kotlinx.android.synthetic.main.activity_party_details.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
 
-class PartyDetailsActivity() : AppCompatActivity(R.layout.party_details) {
+@ExperimentalCoroutinesApi
+class PartyDetailsActivity : AppCompatActivity(R.layout.activity_party_details) {
 
     private val viewModel: PartyDetailsViewModel by viewModel()
 
@@ -27,16 +30,47 @@ class PartyDetailsActivity() : AppCompatActivity(R.layout.party_details) {
         super.onCreate(savedInstanceState)
         val partyId = intent.getStringExtra(PartiesActivity.PARTY_ID_EXTRA)
         back_Arrow.setOnClickListener { onBackPressed() }
+        retry_button.setOnClickListener { viewModel.getPartyById(partyId) }
+        observeViewModel()
+        viewModel.getPartyById(partyId)
+    }
 
-        viewModel.loading.observe(this, LoadingObserver(details_progress, details_container))
 
+    private fun observeViewModel() {
         viewModel.party.observe(this, Observer {
             showPartyDetails(it)
         })
 
-        viewModel.setPartyId(partyId)
+        viewModel.loading.observe(this, Observer {
+            when (it) {
+                true -> showLoadingState()
+                false -> hideLoadingState()
+            }
+        })
+
+        viewModel.error.observe(this, Observer {
+            showErrorState()
+        })
     }
 
+    private fun showLoadingState() {
+        hideErrorState()
+        details_container.gone()
+        details_progress.visible()
+    }
+
+    private fun hideLoadingState() {
+        details_container.visible()
+        details_progress.gone()
+    }
+
+    private fun showErrorState() {
+        error_view.visible()
+    }
+
+    private fun hideErrorState() {
+        error_view.gone()
+    }
 
     private fun showPartyDetails(party: Party) {
         party.apply {

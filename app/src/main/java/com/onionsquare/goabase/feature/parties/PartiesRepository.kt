@@ -12,17 +12,13 @@ class PartiesRepository(private val api: GoaBaseApi) : BaseRepository() {
     fun getPartiesByCountry(country: String): Flow<PartiesData<Any>> =
             flow {
                 when (val result = apiCall { api.getPartiesByCountry(country) }) {
-                    is Result.Success -> {
-                        emit(PartiesData.Success(result.data.parties))
-                    }
-                    is Result.Error -> {
-                        emit(PartiesData.Error(result.exception))
-                    }
+                    is Result.Success -> emit(PartiesData.Success(result.data.parties))
+                    is Result.Error -> emit(PartiesData.Error(result.exception))
                 }
             }
 }
 
 sealed class PartiesData<out T : Any> {
-    data class Success(val countries: List<Party>) : PartiesData<List<Party>>()
+    data class Success(val parties: List<Party>) : PartiesData<List<Party>>()
     data class Error(val e: Exception) : PartiesData<Nothing>()
 }

@@ -27,7 +27,7 @@ class PartiesViewModel(val partiesRepository: PartiesRepository) : ViewModel() {
                     .onCompletion { _loading.value = false }
                     .collect { res ->
                         when (res) {
-                            is PartiesData.Success -> _parties.value = res.countries
+                            is PartiesData.Success -> _parties.value = res.parties
                             is PartiesData.Error -> error.value = "Unexpected error"
                         }
                     }
