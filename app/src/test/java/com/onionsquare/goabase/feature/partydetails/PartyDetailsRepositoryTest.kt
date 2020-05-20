@@ -5,10 +5,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class PartyDetailsRepositoryTest {
@@ -21,9 +19,11 @@ class PartyDetailsRepositoryTest {
     }
 
     @Test
-    fun `get party details by id`() = runBlockingTest{
-        partyDetailsRepository.getPartyDetailsById("1").collect {res ->
-            Assertions.assertThat(res.id).isEqualTo("1")
+    fun `get party details by id`() = runBlockingTest {
+        partyDetailsRepository.getPartyDetailsById("1").collect { res ->
+            when (res) {
+                is PartyData.Success -> Assertions.assertThat(res.party.id).isEqualTo("1")
+            }
         }
     }
 }

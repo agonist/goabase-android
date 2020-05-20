@@ -41,7 +41,7 @@ class PartyDetailsViewModelViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `get party by id`() {
-        viewModel.setPartyId("1")
+        viewModel.getPartyById("1")
 
         verifyLoading(2, booleanArrayOf(true, false))
         partyArgumentCaptor().run {

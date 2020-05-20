@@ -42,19 +42,19 @@ class DumbApiRepository : GoaBaseApi {
         return response
     }
 
-    override suspend fun getPartiesByCountry(country: String): Parties {
+    override suspend fun getPartiesByCountry(country: String): Response<Parties> {
         return when (country) {
-            "FR" -> Parties(francePatrties)
-            "IT" -> Parties(italyParties)
-            else -> Parties(listOf())
+            "FR" -> Response.success<Parties>(Parties(francePatrties))
+            "IT" -> Response.success<Parties>(Parties(italyParties))
+            else -> Response.success<Parties>(Parties(listOf()))
         }
     }
 
-    override suspend fun getParty(id: String): PartyReply {
+    override suspend fun getParty(id: String): Response<PartyReply> {
         val l = arrayListOf<Party>()
         l.addAll(francePatrties)
         l.addAll(italyParties)
 
-        return PartyReply(l.find { it.id == id }!!)
+        return Response.success<PartyReply>(PartyReply(l.find { it.id == id }!!))
     }
 }

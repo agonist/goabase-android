@@ -23,7 +23,9 @@ class PartiesRepositoryTest {
     fun `get parties by country`() = runBlockingTest {
 
         partiesRepository.getPartiesByCountry("FR").collect { res ->
-            assertThat(res.size, `is`(3))
+            when (res) {
+                is PartiesData.Success -> assertThat(res.parties.size, `is`(3))
+            }
         }
     }
 }

@@ -42,7 +42,7 @@ class PartiesViewModelViewModelTest : BaseViewModelTest() {
     @Test
     fun `test get parties by country`() {
 
-        viewModel.setCountry("FR")
+        viewModel.getPartiesByCountry("FR")
 
         verifyLoading(2, booleanArrayOf(true, false))
         verifyPartiesSize(3)
