@@ -8,7 +8,7 @@ data class Parties(
         val parties: List<Party>
 )
 
-data class PartyReply(
+data class PartyDetails(
         @SerializedName("party")
         val party: Party
 )

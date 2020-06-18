@@ -1,24 +1,19 @@
 package com.onionsquare.goabase.feature.countries
 
 import androidx.lifecycle.*
-import com.hadilq.liveevent.LiveEvent
+import com.onionsquare.goabase.domain.usecase.CountriesUseCase
+import com.onionsquare.goabase.domain.usecase.State
+import com.onionsquare.goabase.model.Countries
 import com.onionsquare.goabase.model.Country
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
-class CountriesViewModel(private val countriesRepository: CountriesRepository) : ViewModel() {
+class CountriesViewModel(private val usecase: CountriesUseCase) : ViewModel() {
 
-    private val _countries = MutableLiveData<List<Country>>()
-    val countries: LiveData<List<Country>> = Transformations.map(_countries) { res -> res }
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading = Transformations.map(_loading) { res -> res }
-
-    val error = LiveEvent<String>()
+    val countries: StateFlow<State<List<Country>>> get() = _countries
+    private val _countries: MutableStateFlow<State<List<Country>>> =
+            MutableStateFlow(State.Init)
 
     fun getCountriesAll() {
         fetchCountries("list-all")
@@ -26,15 +21,9 @@ class CountriesViewModel(private val countriesRepository: CountriesRepository) :
 
     private fun fetchCountries(countriesParams: String) {
         viewModelScope.launch {
-            countriesRepository.listAllCountriesSortedByPartiesAmount(countriesParams)
-                    .onStart { _loading.value = true }
-                    .onCompletion { _loading.value = false }
-                    .collect { res ->
-                        when (res) {
-                            is CountriesData.Success -> _countries.value = res.countries
-                            is CountriesData.Error -> error.value = "Unexpected error"
-                        }
-                    }
+            usecase.listAllCountriesSortedByPartiesAmount(countriesParams)
+                    .onStart { _countries.value = State.Loading }
+                    .collect { res -> _countries.value = res }
         }
     }
 }

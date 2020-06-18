@@ -1,0 +1,28 @@
+{
+  "countrylist": [
+    {
+      "nameCountry": "France",
+      "isoCountry": "FR",
+      "numParties": "10",
+      "urlCountry": "https:\/\/www.goabase.net\/api\/party\/json\/?country=FR"
+    },
+    {
+      "nameCountry": "Germany",
+      "isoCountry": "DE",
+      "numParties": "99",
+      "urlCountry": "https:\/\/www.goabase.net\/api\/party\/json\/?country=DE"
+    },
+    {
+      "nameCountry": "Thailand",
+      "isoCountry": "TH",
+      "numParties": "4",
+      "urlCountry": "https:\/\/www.goabase.net\/api\/party\/json\/?country=TH"
+    },
+    {
+      "nameCountry": "Italy",
+      "isoCountry": "IT",
+      "numParties": "7",
+      "urlCountry": "https:\/\/www.goabase.net\/api\/party\/json\/?country=TH"
+    }
+  ]
+}

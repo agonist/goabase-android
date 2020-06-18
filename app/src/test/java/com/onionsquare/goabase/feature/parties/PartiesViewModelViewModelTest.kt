@@ -1,62 +1,81 @@
 package com.onionsquare.goabase.feature.parties
 
-import androidx.lifecycle.Observer
+import com.onionsquare.goabase.BaseRepository
 import com.onionsquare.goabase.BaseViewModelTest
+import com.onionsquare.goabase.TestUtils
+import com.onionsquare.goabase.domain.repository.GoabaseRemoteRepository
+import com.onionsquare.goabase.domain.usecase.PartiesUseCase
+import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Party
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.onionsquare.goabase.network.GoaBaseApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.module.Module
-import org.koin.dsl.module
-import org.koin.test.inject
-import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
-@ExperimentalCoroutinesApi
 class PartiesViewModelViewModelTest : BaseViewModelTest() {
 
+    lateinit var viewModel: PartiesViewModel
+
     @Mock
-    lateinit var partiesObserver: Observer<List<Party>>
-
-    private val viewModel: PartiesViewModel by inject()
-
-    override fun providesKoinModules(): Module {
-        return module {
-            factory { PartiesRepository(get()) }
-            viewModel { PartiesViewModel(get()) }
-        }
-    }
+    lateinit var api: GoaBaseApi
 
     @Before
-    fun init() {
+    fun setup() {
         MockitoAnnotations.initMocks(this)
 
-        viewModel.loading.observeForever(loadingObserver)
-        viewModel.parties.observeForever(partiesObserver)
+        val repository = GoabaseRemoteRepository(api)
+        val useCase = PartiesUseCase(repository)
+        viewModel = PartiesViewModel(useCase)
     }
 
     @Test
-    fun `test get parties by country`() {
+    fun `test get parties by country`() = runBlockingTest {
+        Mockito.`when`(api.getPartiesByCountry("FR")).thenReturn(TestUtils.buildPartiesResponseOk())
+
+        val res = arrayListOf<State<List<Party>>>()
+
+        viewModel.parties
+                .take(3)
+                .onEach { res.add(it) }
+                .launchIn(this)
 
         viewModel.getPartiesByCountry("FR")
 
-        verifyLoading(2, booleanArrayOf(true, false))
-        verifyPartiesSize(3)
+        Assertions.assertThat(res[0]).isInstanceOf(State.Init::class.java)
+        Assertions.assertThat(res[1]).isInstanceOf(State.Loading::class.java)
+        Assertions.assertThat(res[2]).isInstanceOf(State.Success::class.java)
+
+        val datas = (res[2] as State.Success).data
+        Assertions.assertThat(datas.size).isEqualTo(4)
     }
 
-    private fun listArgumentCaptor(): ArgumentCaptor<List<Party>> {
-        val list: List<Party> = listOf()
-        return ArgumentCaptor.forClass(list::class.java)
-    }
 
-    private fun verifyPartiesSize(count: Int) {
-        listArgumentCaptor().run {
-            Mockito.verify(partiesObserver, Mockito.times(1)).onChanged(capture())
-            Assertions.assertThat(allValues[0].size).isEqualTo(count)
-        }
+    @Test
+    fun `test get parties by country fail`() = runBlockingTest {
+        Mockito.`when`(api.getPartiesByCountry("FR")).thenReturn(TestUtils.buildError401Response())
+
+        val res = arrayListOf<State<List<Party>>>()
+
+        viewModel.parties
+                .take(3)
+                .onEach { res.add(it) }
+                .launchIn(this)
+
+        viewModel.getPartiesByCountry("FR")
+
+        Assertions.assertThat(res[0]).isInstanceOf(State.Init::class.java)
+        Assertions.assertThat(res[1]).isInstanceOf(State.Loading::class.java)
+        Assertions.assertThat(res[2]).isInstanceOf(State.Error::class.java)
+
+        val error = (res[2] as State.Error).error
+        Assertions.assertThat(error).isEqualTo(BaseRepository.ErrorType.UNKNOWN)
+
     }
 }

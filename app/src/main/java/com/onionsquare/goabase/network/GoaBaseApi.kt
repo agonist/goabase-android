@@ -2,7 +2,7 @@ package com.onionsquare.goabase.network
 
 import com.onionsquare.goabase.model.Countries
 import com.onionsquare.goabase.model.Parties
-import com.onionsquare.goabase.model.PartyReply
+import com.onionsquare.goabase.model.PartyDetails
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -17,6 +17,6 @@ interface GoaBaseApi {
     suspend fun getPartiesByCountry(@Query("country") country: String): Response<Parties>
 
     @GET("/api/party/json/{id}")
-    suspend fun getParty(@Path("id") id: String): Response<PartyReply>
+    suspend fun getParty(@Path("id") id: String): Response<PartyDetails>
 
 }

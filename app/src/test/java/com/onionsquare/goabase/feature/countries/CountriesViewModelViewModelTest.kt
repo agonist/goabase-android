@@ -1,84 +1,87 @@
 package com.onionsquare.goabase.feature.countries
 
-import androidx.lifecycle.Observer
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.onionsquare.goabase.BaseRepository
 import com.onionsquare.goabase.BaseViewModelTest
+import com.onionsquare.goabase.MainCoroutineRule
+import com.onionsquare.goabase.TestUtils
+import com.onionsquare.goabase.domain.repository.GoabaseRemoteRepository
+import com.onionsquare.goabase.domain.usecase.CountriesUseCase
+import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Country
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.onionsquare.goabase.network.GoaBaseApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.inject
-import org.koin.core.module.Module
-import org.koin.dsl.module
-import org.koin.test.mock.MockProviderRule
-import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
 
-@ExperimentalCoroutinesApi
 class CountriesViewModelViewModelTest : BaseViewModelTest() {
 
-    val viewModel: CountriesViewModel by inject()
+    lateinit var viewModel: CountriesViewModel
 
     @Mock
-    lateinit var countriesObserver: Observer<List<Country>>
-
-    override fun providesKoinModules(): Module {
-        return module {
-            factory { CountriesRepository(get()) }
-            viewModel { CountriesViewModel(get()) }
-        }
-    }
-
-    @get:Rule
-    val mockProvider = MockProviderRule.create { clazz ->
-        Mockito.mock(clazz.java)
-    }
+    lateinit var api: GoaBaseApi
 
     @Before
-    fun init() {
+    fun setup() {
         MockitoAnnotations.initMocks(this)
-        viewModel.countries.observeForever(countriesObserver)
-        viewModel.loading.observeForever(loadingObserver)
+        val repository = GoabaseRemoteRepository(api)
+        val useCase = CountriesUseCase(repository)
+        viewModel = CountriesViewModel(useCase)
     }
 
     @Test
-    fun `get countries list ok`() {
+    fun `get countries list ok`() = runBlockingTest {
+        Mockito.`when`(api.getCountries("list-all")).thenReturn(TestUtils.buildCountriesResponseOk())
+
+        val res = arrayListOf<State<List<Country>>>()
+
+        viewModel.countries
+                .take(3)
+                .onEach { res.add(it) }
+                .launchIn(this)
+
         viewModel.getCountriesAll()
-        verifyLoading(2, booleanArrayOf(true, false))
-        verifyCountriesStateOk()
+
+
+        assertThat(res[0]).isInstanceOf(State.Init::class.java)
+        assertThat(res[1]).isInstanceOf(State.Loading::class.java)
+        assertThat(res[2]).isInstanceOf(State.Success::class.java)
+
+        val datas = (res[2] as State.Success).data
+        assertThat(datas.size).isEqualTo(4)
+        assertThat(datas[0].isoCountry).isEqualTo("DE")
+        assertThat(datas[1].isoCountry).isEqualTo("FR")
+        assertThat(datas[2].isoCountry).isEqualTo("IT")
+        assertThat(datas[3].isoCountry).isEqualTo("TH")
     }
 
-//    @Test
-//    fun `get activity_countries list error`() {
-//        viewModel.getCountriesAll("err")
-//        verifyCountriesStateError()
-//    }
+    @Test
+    fun `get countries fail`() = runBlockingTest {
+        Mockito.`when`(api.getCountries("list-all")).thenReturn(TestUtils.buildError401Response())
 
+        val res = arrayListOf<State<List<Country>>>()
 
-    protected fun verifyCountriesStateOk() {
-        listArgumentCaptor().run {
-            Mockito.verify(countriesObserver, Mockito.times(1)).onChanged(capture())
-            assertThat( allValues[0].size).isEqualTo(4)
-            assertThat( allValues[0][0].isoCountry).isEqualTo("IT")
-        }
-    }
+        viewModel.countries
+                .take(3)
+                .onEach { res.add(it) }
+                .launchIn(this)
 
-//    protected fun verifyCountriesStateError() {
-//        listArgumentCaptor().run {
-//            Mockito.verify(countriesObserver, Mockito.times(2)).onChanged(capture())
-//
-//            assertThat(allValues[0]::class.java).isEqualTo(CountriesData.Loading::class.java)
-//            assertThat(allValues[1]::class.java).isEqualTo(CountriesData.Error::class.java)
-//        }
-//    }
+        viewModel.getCountriesAll()
 
-    private fun listArgumentCaptor(): ArgumentCaptor<List<Country>> {
-        val list = listOf<Country>()
-        return ArgumentCaptor.forClass(list::class.java)
+        assertThat(res[0]).isInstanceOf(State.Init::class.java)
+        assertThat(res[1]).isInstanceOf(State.Loading::class.java)
+        assertThat(res[2]).isInstanceOf(State.Error::class.java)
+
+        val error = (res[2] as State.Error).error
+        assertThat(error).isEqualTo(BaseRepository.ErrorType.UNKNOWN)
     }
 }

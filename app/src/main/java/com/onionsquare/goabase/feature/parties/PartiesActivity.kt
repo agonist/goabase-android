@@ -5,19 +5,20 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.onionsquare.goabase.R
+import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.feature.countries.CountriesActivity
 import com.onionsquare.goabase.feature.partydetails.PartyDetailsActivity
 import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.visible
 import kotlinx.android.synthetic.main.activity_parties.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@ExperimentalCoroutinesApi
 class PartiesActivity : AppCompatActivity(R.layout.activity_parties), PartiesAdapter.PartyClickListener {
 
     companion object {
@@ -43,28 +44,24 @@ class PartiesActivity : AppCompatActivity(R.layout.activity_parties), PartiesAda
 
         retry_button.setOnClickListener { viewModel.getPartiesByCountry(country!!) }
 
-        observeViewModel()
+        viewModel.parties
+                .onEach { handleState(it) }
+                .launchIn(lifecycleScope)
 
         country?.let {
             viewModel.getPartiesByCountry(country)
         }
     }
 
-    private fun observeViewModel() {
-        viewModel.parties.observe(this, Observer {
-            refreshData(it)
-        })
-
-        viewModel.loading.observe(this, Observer {
-            when (it) {
-                true -> showLoadingState()
-                false -> hideLoadingState()
+    private fun handleState(state: State<List<Party>>) {
+        when (state) {
+            is State.Loading -> showLoadingState()
+            is State.Success -> {
+                hideLoadingState()
+                refreshData(state.data)
             }
-        })
-
-        viewModel.error.observe(this, Observer {
-            showErrorState()
-        })
+            is State.Error -> showErrorState()
+        }
     }
 
     private fun refreshData(parties: List<Party>) {

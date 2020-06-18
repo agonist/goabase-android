@@ -5,20 +5,21 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.databinding.ActivityCountriesBinding
+import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Country
 import com.onionsquare.goabase.visible
 import kotlinx.android.synthetic.main.activity_countries.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-@ExperimentalCoroutinesApi
 class CountriesActivity : AppCompatActivity(), CountryAdapter.CountryClickListener {
 
     companion object {
@@ -42,25 +43,24 @@ class CountriesActivity : AppCompatActivity(), CountryAdapter.CountryClickListen
         countries_recycler.layoutManager = LinearLayoutManager(this)
         countries_recycler.adapter = adapter
 
-        observeViewModel()
+        viewModel.countries.onEach {
+            handleState(it)
+        }.launchIn(lifecycleScope)
+
         viewModel.getCountriesAll()
     }
 
-    private fun observeViewModel() {
-        viewModel.countries.observe(this, Observer {
-            refreshData(it)
-        })
-
-        viewModel.loading.observe(this, Observer {
-            when (it) {
-                true -> showLoadingState()
-                false -> hideLoadingState()
+    private fun handleState(state: State<List<Country>>) {
+        when (state) {
+            State.Loading -> {
+                showLoadingState()
             }
-        })
-
-        viewModel.error.observe(this, Observer {
-            showErrorState()
-        })
+            is State.Success -> {
+                hideLoadingState()
+                refreshData(state.data)
+            }
+            is State.Error -> showErrorState()
+        }
     }
 
     private fun refreshData(countries: List<Country>) {

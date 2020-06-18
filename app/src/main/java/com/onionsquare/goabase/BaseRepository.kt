@@ -9,19 +9,24 @@ abstract class BaseRepository {
         try {
             response = call.invoke()
         } catch (t: Throwable) {
-            return Result.Error(GoabaseException(t))
+            return Result.Error(ErrorType.UNKNOWN)
         }
 
         if (!response.isSuccessful) {
-            return Result.Error(GoabaseException(Throwable("Unknow error")))
+            return Result.Error(ErrorType.UNKNOWN)
         }
         return Result.Success(response.body()!!)
     }
-}
 
-sealed class Result<out T : Any> {
-    data class Success<out T : Any>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
+
+    enum class ErrorType {
+        UNKNOWN
+    }
 }
 
 class GoabaseException(throwable: Throwable): Exception(throwable)
+
+sealed class Result<out T : Any> {
+    data class Success<out T : Any>(val data: T) : Result<T>()
+    data class Error(val type: BaseRepository.ErrorType) : Result<Nothing>()
+}

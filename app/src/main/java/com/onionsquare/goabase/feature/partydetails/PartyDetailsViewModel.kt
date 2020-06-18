@@ -1,36 +1,27 @@
 package com.onionsquare.goabase.feature.partydetails
 
-import androidx.lifecycle.*
-import com.hadilq.liveevent.LiveEvent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.onionsquare.goabase.domain.usecase.PartyUseCase
+import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Party
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
-class PartyDetailsViewModel(val partyDetailsRepository: PartyDetailsRepository) : ViewModel() {
+class PartyDetailsViewModel(val usecase: PartyUseCase) : ViewModel() {
 
-    private val _loading = MutableLiveData<Boolean>()
-    val loading = Transformations.map(_loading) { res -> res }
-
-    private val _party = MutableLiveData<Party>()
-    val party: LiveData<Party> = Transformations.map(_party) { res -> res }
-
-    val error = LiveEvent<String>()
+    val party: StateFlow<State<Party>> get() = _party
+    private val _party: MutableStateFlow<State<Party>> =
+            MutableStateFlow(State.Init)
 
     private fun fetchPartyDetails(partyId: String) {
         viewModelScope.launch {
-            partyDetailsRepository.getPartyDetailsById(partyId)
-                    .onStart { _loading.value = true }
-                    .onCompletion { _loading.value = false }
-                    .collect { res ->
-                        when (res) {
-                            is PartyData.Success -> _party.value = res.party
-                            is PartyData.Error -> error.value = "Unexpected error"
-                        }
-                    }
+            usecase.getPartyDetailsById(partyId)
+                    .onStart { _party.value = State.Loading }
+                    .collect { res -> _party.value = res }
         }
     }
 

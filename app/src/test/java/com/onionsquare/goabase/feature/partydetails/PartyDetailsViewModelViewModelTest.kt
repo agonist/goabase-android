@@ -1,56 +1,80 @@
 package com.onionsquare.goabase.feature.partydetails
 
-import androidx.lifecycle.Observer
+import com.onionsquare.goabase.BaseRepository
 import com.onionsquare.goabase.BaseViewModelTest
+import com.onionsquare.goabase.TestUtils
+import com.onionsquare.goabase.domain.repository.GoabaseRemoteRepository
+import com.onionsquare.goabase.domain.usecase.PartyUseCase
+import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Party
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.onionsquare.goabase.network.GoaBaseApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.test.runBlockingTest
 import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
-import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.inject
-import org.koin.core.module.Module
-import org.koin.dsl.module
-import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
-@ExperimentalCoroutinesApi
 class PartyDetailsViewModelViewModelTest : BaseViewModelTest() {
 
-    val viewModel: PartyDetailsViewModel by inject()
+    lateinit var viewModel: PartyDetailsViewModel
 
     @Mock
-    lateinit var partyObserver: Observer<Party>
-
-    override fun providesKoinModules(): Module {
-        return module {
-            factory { PartyDetailsRepository(get()) }
-            viewModel { PartyDetailsViewModel(get()) }
-        }
-    }
+    lateinit var api: GoaBaseApi
 
     @Before
-    fun init() {
+    fun setup() {
         MockitoAnnotations.initMocks(this)
 
-        viewModel.loading.observeForever(loadingObserver)
-        viewModel.party.observeForever(partyObserver)
+        val repository = GoabaseRemoteRepository(api)
+        val useCase = PartyUseCase(repository)
+        viewModel = PartyDetailsViewModel(useCase)
     }
 
     @Test
-    fun `get party by id`() {
-        viewModel.getPartyById("1")
+    fun `get party by id`() = runBlockingTest {
+        Mockito.`when`(api.getParty("xxx")).thenReturn(TestUtils.buildPartyResponseOk())
 
-        verifyLoading(2, booleanArrayOf(true, false))
-        partyArgumentCaptor().run {
-            Mockito.verify(partyObserver, Mockito.times(1)).onChanged(capture())
-            Assertions.assertThat(allValues[0].id).isEqualTo("1")
-        }
+        val res = arrayListOf<State<Party>>()
+
+        viewModel.party
+                .take(3)
+                .onEach { res.add(it) }
+                .launchIn(this)
+
+        viewModel.getPartyById("xxx")
+
+        Assertions.assertThat(res[0]).isInstanceOf(State.Init::class.java)
+        Assertions.assertThat(res[1]).isInstanceOf(State.Loading::class.java)
+        Assertions.assertThat(res[2]).isInstanceOf(State.Success::class.java)
+
+        val data = (res[2] as State.Success).data
+        Assertions.assertThat(data.id).isEqualTo("105521")
     }
 
-    private fun partyArgumentCaptor(): ArgumentCaptor<Party> =
-            ArgumentCaptor.forClass(Party::class.java)
 
+    @Test
+    fun `get party by id fail`() = runBlockingTest {
+        Mockito.`when`(api.getParty("xxx")).thenReturn(TestUtils.buildError401Response())
+
+        val res = arrayListOf<State<Party>>()
+
+        viewModel.party
+                .take(3)
+                .onEach { res.add(it) }
+                .launchIn(this)
+
+        viewModel.getPartyById("xxx")
+
+        Assertions.assertThat(res[0]).isInstanceOf(State.Init::class.java)
+        Assertions.assertThat(res[1]).isInstanceOf(State.Loading::class.java)
+        Assertions.assertThat(res[2]).isInstanceOf(State.Error::class.java)
+
+        val error = (res[2] as State.Error).error
+        Assertions.assertThat(error).isEqualTo(BaseRepository.ErrorType.UNKNOWN)
+    }
 }

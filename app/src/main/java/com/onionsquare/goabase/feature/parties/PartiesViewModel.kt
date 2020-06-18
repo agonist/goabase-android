@@ -1,36 +1,27 @@
 package com.onionsquare.goabase.feature.parties
 
-import androidx.lifecycle.*
-import com.hadilq.liveevent.LiveEvent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.onionsquare.goabase.domain.usecase.PartiesUseCase
+import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Party
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-@ExperimentalCoroutinesApi
-class PartiesViewModel(val partiesRepository: PartiesRepository) : ViewModel() {
+class PartiesViewModel(private val usecase: PartiesUseCase) : ViewModel() {
 
-    private val _loading = MutableLiveData<Boolean>()
-    val loading = Transformations.map(_loading) { res -> res }
-
-    private val _parties = MutableLiveData<List<Party>>()
-    val parties: LiveData<List<Party>> = Transformations.map(_parties) { res -> res }
-
-    val error = LiveEvent<String>()
+    val parties: StateFlow<State<List<Party>>> get() = _parties
+    private val _parties: MutableStateFlow<State<List<Party>>> =
+            MutableStateFlow(State.Init)
 
     private fun fetchParties(country: String) {
         viewModelScope.launch {
-            partiesRepository.getPartiesByCountry(country)
-                    .onStart { _loading.value = true }
-                    .onCompletion { _loading.value = false }
-                    .collect { res ->
-                        when (res) {
-                            is PartiesData.Success -> _parties.value = res.parties
-                            is PartiesData.Error -> error.value = "Unexpected error"
-                        }
-                    }
+            usecase.listPartiesByCountry(country)
+                    .onStart { _parties.value = State.Loading }
+                    .collect { res -> _parties.value = res }
         }
     }
 
