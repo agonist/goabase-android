@@ -6,101 +6,95 @@ import android.os.Bundle
 import android.text.util.Linkify
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import coil.api.load
+import coil.load
 import com.onionsquare.goabase.R
-import com.onionsquare.goabase.domain.usecase.State
+import com.onionsquare.goabase.databinding.ActivityPartyDetailsBinding
 import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.visible
-import kotlinx.android.synthetic.main.activity_party_details.*
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
-class PartyDetailsActivity : AppCompatActivity(R.layout.activity_party_details) {
+class PartyDetailsActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityPartyDetailsBinding
     private val viewModel: PartyDetailsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityPartyDetailsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val partyId = intent.getStringExtra(PartiesActivity.PARTY_ID_EXTRA)
-        back_Arrow.setOnClickListener { onBackPressed() }
+        binding.backArrow.setOnClickListener { onBackPressed() }
 
-        viewModel.party
-                .onEach { handleState(it) }
-                .launchIn(lifecycleScope)
 
+        viewModel.party.observe(this, { handleAction(it) })
         partyId?.let {
-            retry_button.setOnClickListener { viewModel.getPartyById(partyId) }
+            binding.retryButton.setOnClickListener { viewModel.getPartyById(partyId) }
             viewModel.getPartyById(partyId)
         }
     }
 
-    private fun handleState(state: State<Party>) {
-        when (state) {
-            State.Loading -> showLoadingState()
-            is State.Success -> {
-                hideLoadingState()
-                showPartyDetails(state.data)
-            }
-            is State.Error -> showErrorState()
+    private fun handleAction(action: PartyDetailsAction) {
+        when (action) {
+            is PartyDetailsAction.Error -> showErrorState()
+            is PartyDetailsAction.GetPartyDetailsSuccess -> showPartyDetails(action.party)
+            is PartyDetailsAction.Loading -> showLoadingState()
         }
-
     }
 
     private fun showLoadingState() {
         hideErrorState()
-        details_container.gone()
-        details_progress.visible()
+        binding.detailsContainer.gone()
+        binding.detailsProgress.visible()
     }
 
     private fun hideLoadingState() {
-        details_container.visible()
-        details_progress.gone()
+        binding.detailsContainer.visible()
+        binding.detailsProgress.gone()
     }
 
     private fun showErrorState() {
-        error_view.visible()
+        binding.errorView.visible()
     }
 
     private fun hideErrorState() {
-        error_view.gone()
+        binding.errorView.gone()
     }
 
     private fun showPartyDetails(party: Party) {
+        hideLoadingState()
         party.apply {
 
             urlImageFull?.let {
-                party_picture.load(urlImageFull) {
+                binding.partyPicture.load(urlImageFull) {
                     crossfade(true)
                     error(R.drawable.rick)
                 }
             } ?: kotlin.run {
-                party_picture.setImageDrawable(getDrawable(R.drawable.rick))
+                binding.partyPicture.setImageDrawable(getDrawable(R.drawable.rick))
             }
 
-            party_name.text = nameParty
+            binding.partyName.text = nameParty
 
             val dateStart = OffsetDateTime.parse(dateStart).toLocalDateTime()
             val dateEnd = OffsetDateTime.parse(dateEnd).toLocalDateTime()
-            party_date.text = "${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateStart)} - ${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateEnd)}"
+            binding.partyDate.text = "${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateStart)} - ${DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(dateEnd)}"
 
             if (textLocation != "Unknnown") {
-                party_location.text = nameTown
-                location_title.visibility = View.VISIBLE
-                location_full.visibility = View.VISIBLE
-                location_full.text = textLocation
+                binding.partyLocation.text = nameTown
+                binding.locationTitle.visibility = View.VISIBLE
+                binding.locationFull.visibility = View.VISIBLE
+                binding.locationFull.text = textLocation
             } else {
-                location_title.visibility = View.GONE
-                location_full.visibility = View.GONE
-                party_location.text = textLocation
+                binding.locationTitle.visibility = View.GONE
+                binding.locationFull.visibility = View.GONE
+                binding.partyLocation.text = textLocation
             }
-            party_location.setOnClickListener {
+            binding.partyLocation.setOnClickListener {
                 val gmmIntentUri = Uri.parse("geo:${party.geoLat},${party.geoLon}")
                 val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
                 mapIntent.`package` = "com.google.android.apps.maps"
@@ -108,31 +102,31 @@ class PartyDetailsActivity : AppCompatActivity(R.layout.activity_party_details) 
             }
 
             if (textLineup.isNotEmpty()) {
-                party_lineup.text = textLineup
-                Linkify.addLinks(party_lineup, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
+                binding.partyLineup.text = textLineup
+                Linkify.addLinks(binding.partyLineup, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
             }
 
             if (textMore.isNotEmpty()) {
-                party_info.text = textMore
-                Linkify.addLinks(party_info, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
+                binding.partyInfo.text = textMore
+                Linkify.addLinks(binding.partyInfo, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
             }
 
             if (textDeco.isNotEmpty()) {
-                party_deco.text = textDeco
-                Linkify.addLinks(party_deco, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
+                binding.partyDeco.text = textDeco
+                Linkify.addLinks(binding.partyDeco, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
             }
 
             if (textEntryFee.isNotEmpty()) {
-                party_fee.text = textEntryFee
+                binding.partyFee.text = textEntryFee
             }
 
             if (nameOrganizer.isNotEmpty()) {
-                party_organizer.text = "${nameOrganizer}"
+                binding.partyOrganizer.text = "${nameOrganizer}"
             }
             urlOrganizer?.let {
-                party_organizer.text = "${party_organizer.text}\n${urlOrganizer}"
+                binding.partyOrganizer.text = "${binding.partyOrganizer.text}\n${urlOrganizer}"
             }
-            Linkify.addLinks(party_organizer, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
+            Linkify.addLinks(binding.partyOrganizer, Linkify.EMAIL_ADDRESSES or Linkify.WEB_URLS)
         }
     }
 }

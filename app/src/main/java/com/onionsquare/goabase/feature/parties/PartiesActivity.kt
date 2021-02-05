@@ -4,92 +4,86 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.onionsquare.goabase.R
-import com.onionsquare.goabase.domain.usecase.State
+import com.livermor.delegateadapter.delegate.CompositeDelegateAdapter
+import com.onionsquare.goabase.databinding.ActivityPartiesBinding
 import com.onionsquare.goabase.feature.countries.CountriesActivity
 import com.onionsquare.goabase.feature.partydetails.PartyDetailsActivity
 import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.visible
-import kotlinx.android.synthetic.main.activity_parties.*
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PartiesActivity : AppCompatActivity(R.layout.activity_parties), PartiesAdapter.PartyClickListener {
+class PartiesActivity : AppCompatActivity() {
 
     companion object {
         const val PARTY_ID_EXTRA = "PARTY_ID"
     }
 
+    private lateinit var binding: ActivityPartiesBinding
     private val viewModel: PartiesViewModel by viewModel()
-    private val adapter = PartiesAdapter(arrayListOf(), this)
+    private val adapter: CompositeDelegateAdapter = CompositeDelegateAdapter(
+            PartyDelegateAdapter { party -> onPartySelected(party) }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityPartiesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val country = intent.getStringExtra(CountriesActivity.COUNTRY_NAME_EXTRA)
 
-        setSupportActionBar(custom_toolbar as Toolbar)
+        setSupportActionBar(binding.customToolbar.root)
         supportActionBar?.apply {
             title = "Parties in $country"
             setDisplayHomeAsUpEnabled(true)
         }
 
-        parties_recycler.setHasFixedSize(true)
-        parties_recycler.layoutManager = LinearLayoutManager(this)
-        parties_recycler.adapter = adapter
+        binding.partiesRecycler.setHasFixedSize(true)
+        binding.partiesRecycler.layoutManager = LinearLayoutManager(this)
+        binding.partiesRecycler.adapter = adapter
 
-        retry_button.setOnClickListener { viewModel.getPartiesByCountry(country!!) }
+        binding.retryButton.setOnClickListener { viewModel.fetchParties(country!!) }
 
-        viewModel.parties
-                .onEach { handleState(it) }
-                .launchIn(lifecycleScope)
-
+        viewModel.parties.observe(this, { handleAction(it) })
         country?.let {
-            viewModel.getPartiesByCountry(country)
+            viewModel.fetchParties(country)
         }
     }
 
-    private fun handleState(state: State<List<Party>>) {
-        when (state) {
-            is State.Loading -> showLoadingState()
-            is State.Success -> {
-                hideLoadingState()
-                refreshData(state.data)
-            }
-            is State.Error -> showErrorState()
+    private fun handleAction(actions: PartiesActions) {
+        when (actions) {
+            is PartiesActions.Error -> showErrorState()
+            is PartiesActions.ListPartiesSuccess -> refreshData(actions.parties)
+            is PartiesActions.Loading -> showLoadingState()
         }
     }
 
     private fun refreshData(parties: List<Party>) {
         hideErrorState()
         hideLoadingState()
-        adapter.refreshDate(parties)
+        adapter.swapData(parties)
     }
 
     private fun showLoadingState() {
         hideErrorState()
-        parties_recycler.gone()
-        parties_progress.visible()
+        binding.partiesRecycler.gone()
+        binding.partiesProgress.visible()
     }
 
     private fun hideLoadingState() {
-        parties_recycler.visible()
-        parties_progress.gone()
+        binding.partiesRecycler.visible()
+        binding.partiesProgress.gone()
     }
 
     private fun showErrorState() {
-        error_view.visible()
+        binding.errorView.visible()
     }
 
     private fun hideErrorState() {
-        error_view.gone()
+        binding.errorView.gone()
     }
 
-    override fun onPartySelected(party: Party) {
+    private fun onPartySelected(party: Party) {
         val intent = Intent(this@PartiesActivity, PartyDetailsActivity::class.java)
         intent.putExtra(PARTY_ID_EXTRA, party.id)
         startActivity(intent)

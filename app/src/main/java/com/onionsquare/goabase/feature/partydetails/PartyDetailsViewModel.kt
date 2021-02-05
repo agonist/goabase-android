@@ -1,31 +1,38 @@
 package com.onionsquare.goabase.feature.partydetails
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onionsquare.goabase.domain.usecase.PartyUseCase
 import com.onionsquare.goabase.domain.usecase.State
+import com.onionsquare.goabase.feature.parties.PartiesActions
 import com.onionsquare.goabase.model.Party
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class PartyDetailsViewModel(val usecase: PartyUseCase) : ViewModel() {
+class PartyDetailsViewModel(private val usecase: PartyUseCase) : ViewModel() {
 
-    val party: StateFlow<State<Party>> get() = _party
-    private val _party: MutableStateFlow<State<Party>> =
-            MutableStateFlow(State.Init)
+    val party: LiveData<PartyDetailsAction> get() = _party
+    private val _party = MutableLiveData<PartyDetailsAction>()
 
     private fun fetchPartyDetails(partyId: String) {
-        viewModelScope.launch {
             usecase.getPartyDetailsById(partyId)
-                    .onStart { _party.value = State.Loading }
-                    .collect { res -> _party.value = res }
-        }
+                    .onStart { _party.value = PartyDetailsAction.Loading }
+                    .onEach { res -> _party.value = when (res) {
+                        is State.Error -> PartyDetailsAction.Error
+                        is State.Success -> PartyDetailsAction.GetPartyDetailsSuccess(res.data)
+                    } }
+                    .launchIn(viewModelScope)
     }
 
     fun getPartyById(partyId: String) {
         fetchPartyDetails(partyId)
     }
+}
+
+sealed class PartyDetailsAction {
+    object Loading : PartyDetailsAction()
+    object Error : PartyDetailsAction()
+    data class GetPartyDetailsSuccess(val party: Party) : PartyDetailsAction()
 }

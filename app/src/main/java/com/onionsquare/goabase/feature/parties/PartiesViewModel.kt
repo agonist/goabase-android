@@ -1,31 +1,36 @@
 package com.onionsquare.goabase.feature.parties
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onionsquare.goabase.domain.usecase.PartiesUseCase
 import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Party
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 
 class PartiesViewModel(private val usecase: PartiesUseCase) : ViewModel() {
 
-    val parties: StateFlow<State<List<Party>>> get() = _parties
-    private val _parties: MutableStateFlow<State<List<Party>>> =
-            MutableStateFlow(State.Init)
+    val parties: LiveData<PartiesActions> get() = _parties
+    private val _parties = MutableLiveData<PartiesActions>()
 
-    private fun fetchParties(country: String) {
-        viewModelScope.launch {
-            usecase.listPartiesByCountry(country)
-                    .onStart { _parties.value = State.Loading }
-                    .collect { res -> _parties.value = res }
-        }
+    fun fetchParties(country: String) {
+        usecase.listPartiesByCountry(country)
+                .onStart { _parties.value = PartiesActions.Loading }
+                .onEach { res ->
+                    _parties.value = when (res) {
+                        is State.Error -> PartiesActions.Error
+                        is State.Success -> PartiesActions.ListPartiesSuccess(res.data)
+                    }
+                }
+                .launchIn(viewModelScope)
     }
+}
 
-    fun getPartiesByCountry(country: String) {
-        fetchParties(country)
-    }
+sealed class PartiesActions {
+    object Loading : PartiesActions()
+    object Error : PartiesActions()
+    data class ListPartiesSuccess(val parties: List<Party>) : PartiesActions()
 }
