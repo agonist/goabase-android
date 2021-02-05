@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.livermor.delegateadapter.delegate.CompositeDelegateAdapter
 import com.onionsquare.goabase.databinding.ActivityPartiesBinding
-import com.onionsquare.goabase.feature.countries.CountriesActivity
+import com.onionsquare.goabase.extraNotNull
+import com.onionsquare.goabase.feature.Const.COUNTRY_NAME_EXTRA
+import com.onionsquare.goabase.feature.Const.PARTY_ID_EXTRA
 import com.onionsquare.goabase.feature.partydetails.PartyDetailsActivity
 import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Party
@@ -16,21 +18,17 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PartiesActivity : AppCompatActivity() {
 
-    companion object {
-        const val PARTY_ID_EXTRA = "PARTY_ID"
-    }
-
     private lateinit var binding: ActivityPartiesBinding
     private val viewModel: PartiesViewModel by viewModel()
     private val adapter: CompositeDelegateAdapter = CompositeDelegateAdapter(
             PartyDelegateAdapter { party -> onPartySelected(party) }
     )
+    private val country by extraNotNull<String>(COUNTRY_NAME_EXTRA)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPartiesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val country = intent.getStringExtra(CountriesActivity.COUNTRY_NAME_EXTRA)
 
         setSupportActionBar(binding.customToolbar.root)
         supportActionBar?.apply {
@@ -38,16 +36,16 @@ class PartiesActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        binding.partiesRecycler.setHasFixedSize(true)
-        binding.partiesRecycler.layoutManager = LinearLayoutManager(this)
-        binding.partiesRecycler.adapter = adapter
+        binding.partiesRecycler.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@PartiesActivity)
+            adapter = adapter
+        }
 
-        binding.retryButton.setOnClickListener { viewModel.fetchParties(country!!) }
+        binding.retryButton.setOnClickListener { viewModel.fetchParties(country) }
 
         viewModel.parties.observe(this, { handleAction(it) })
-        country?.let {
-            viewModel.fetchParties(country)
-        }
+        viewModel.fetchParties(country)
     }
 
     private fun handleAction(actions: PartiesActions) {

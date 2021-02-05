@@ -9,7 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.databinding.ActivityPartyDetailsBinding
-import com.onionsquare.goabase.feature.parties.PartiesActivity
+import com.onionsquare.goabase.extraNotNull
+import com.onionsquare.goabase.feature.Const
 import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.visible
@@ -23,19 +24,17 @@ class PartyDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPartyDetailsBinding
     private val viewModel: PartyDetailsViewModel by viewModel()
 
+    private val partyId by extraNotNull<String>(Const.PARTY_ID_EXTRA)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPartyDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val partyId = intent.getStringExtra(PartiesActivity.PARTY_ID_EXTRA)
         binding.backArrow.setOnClickListener { onBackPressed() }
 
-
         viewModel.party.observe(this, { handleAction(it) })
-        partyId?.let {
-            binding.retryButton.setOnClickListener { viewModel.getPartyById(partyId) }
-            viewModel.getPartyById(partyId)
-        }
+        binding.retryButton.setOnClickListener { viewModel.getPartyById(partyId) }
+        viewModel.getPartyById(partyId)
     }
 
     private fun handleAction(action: PartyDetailsAction) {

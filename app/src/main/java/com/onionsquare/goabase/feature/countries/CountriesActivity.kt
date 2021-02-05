@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.livermor.delegateadapter.delegate.CompositeDelegateAdapter
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.databinding.ActivityCountriesBinding
+import com.onionsquare.goabase.feature.Const.COUNTRY_ISO_EXTRA
+import com.onionsquare.goabase.feature.Const.COUNTRY_NAME_EXTRA
 import com.onionsquare.goabase.feature.parties.PartiesActivity
 import com.onionsquare.goabase.gone
 import com.onionsquare.goabase.model.Country
@@ -15,11 +17,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class CountriesActivity : AppCompatActivity() {
-
-    companion object {
-        const val COUNTRY_NAME_EXTRA = "COUNTRY_NAME"
-        const val COUNTRY_ISO_EXTRA = "COUNTRY_ISO"
-    }
 
     private val adapter: CompositeDelegateAdapter = CompositeDelegateAdapter(
             CountryDelegateAdapter { country -> onCountrySelected(country) }
@@ -35,9 +32,11 @@ class CountriesActivity : AppCompatActivity() {
         setSupportActionBar(binding.customToolbar.root)
         supportActionBar?.title = getString(R.string.countries_title)
 
-        binding.countriesRecycler.setHasFixedSize(true)
-        binding.countriesRecycler.layoutManager = LinearLayoutManager(this)
-        binding.countriesRecycler.adapter = adapter
+        binding.countriesRecycler.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@CountriesActivity)
+            adapter = adapter
+        }
 
         viewModel.countries.observe(this, { handleAction(it) })
         viewModel.fetchCountries()
