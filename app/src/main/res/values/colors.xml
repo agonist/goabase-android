@@ -7,11 +7,6 @@
     <color name="flashyYellow">#FFFF00</color>
 
 
-    <color name="material_drawer_background">#656565</color>
-    <color name="material_drawer_primary_text">#75fa61</color>
-    <color name="material_drawer_selected_text">#75fa61</color>
-
-
     <color name="material_drawer_selected">#656565</color>
 
 
@@ -20,7 +15,6 @@
     <color name="purpleDark">#3f043f</color>
     <color name="moutarde">#FDFC39</color>
     <color name="alienGreen">#29fd2f</color>
-    <color name="spaceBlue">#15102d</color>
     <color name="gray">#89919e</color>
 
 </resources>

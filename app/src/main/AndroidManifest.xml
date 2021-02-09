@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.onionsquare.goabase">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".GoabaseApp"
         android:allowBackup="true"
@@ -11,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".feature.countries.CountriesActivity"
+            android:name=".feature.MainActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -25,5 +27,4 @@
         <activity android:name=".feature.partydetails.PartyDetailsActivity" />
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
