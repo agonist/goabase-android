@@ -7,31 +7,49 @@ import androidx.lifecycle.viewModelScope
 import com.onionsquare.goabase.domain.usecase.CountriesUseCase
 import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Country
+import com.onionsquare.goabase.singleEventFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 class CountriesViewModel(private val usecase: CountriesUseCase) : ViewModel() {
 
-    val countries: LiveData<CountriesActions> get() = _countries
-    private val _countries: MutableLiveData<CountriesActions> = MutableLiveData()
+    // STATE
+
+    val countries: LiveData<CountriesScreenState> get() = _countries
+    private val _countries: MutableLiveData<CountriesScreenState> = MutableLiveData()
 
     fun fetchCountries(countriesParams: String = "list-all") {
         usecase.listAllCountriesSortedByPartiesAmount(countriesParams)
-                .onStart { _countries.value = CountriesActions.Loading }
+                .onStart { _countries.value = CountriesScreenState.Loading }
                 .onEach { res ->
                     _countries.value =
                             when (res) {
-                                is State.Error -> CountriesActions.Error
-                                is State.Success -> CountriesActions.ListCountriesSuccess(res.data)
+                                is State.Error -> CountriesScreenState.Error
+                                is State.Success -> CountriesScreenState.ListCountriesSuccess(res.data)
                             }
                 }
                 .launchIn(viewModelScope)
     }
+
+    // USER ACTIONS
+
+    val userAction: SharedFlow<CountriesScreenAction> get() = _userActions
+    private val _userActions = singleEventFlow<CountriesScreenAction>()
+
+    fun onCountryClicked(country: Country) {
+        _userActions.tryEmit(CountriesScreenAction.CountryClicked(country))
+    }
+
 }
 
-sealed class CountriesActions {
-    object Loading : CountriesActions()
-    object Error : CountriesActions()
-    data class ListCountriesSuccess(val countries: List<Country>) : CountriesActions()
+sealed class CountriesScreenState {
+    object Loading : CountriesScreenState()
+    object Error : CountriesScreenState()
+    data class ListCountriesSuccess(val countries: List<Country>) : CountriesScreenState()
+}
+
+sealed class CountriesScreenAction {
+    data class CountryClicked(val country: Country): CountriesScreenAction()
 }

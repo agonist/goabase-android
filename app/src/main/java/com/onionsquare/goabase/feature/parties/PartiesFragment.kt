@@ -1,4 +1,4 @@
-package com.onionsquare.goabase.feature.countries
+package com.onionsquare.goabase.feature.parties
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,39 +10,42 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.onionsquare.goabase.R
+import com.onionsquare.goabase.extraNotNull
 import com.onionsquare.goabase.feature.Const
-import com.onionsquare.goabase.model.Country
+import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.theme.GoabaseTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+class PartiesFragment : Fragment() {
 
-class CountriesFragment : Fragment() {
+    private val viewModel: PartiesViewModel by viewModel()
 
-    private val viewModel: CountriesViewModel by viewModel()
+    private val countryName by extraNotNull<String>(Const.COUNTRY_NAME_EXTRA)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         viewModel.userAction.asLiveData().observe(viewLifecycleOwner) {
             when (it) {
-                is CountriesScreenAction.CountryClicked -> onCountrySelected(it.country)
+                is PartiesScreenActions.PartyClicked -> onPartySelected(it.party)
             }
         }
 
-        viewModel.fetchCountries()
+        viewModel.fetchParties(countryName)
+
         return ComposeView(requireContext()).apply {
             setContent {
                 GoabaseTheme {
-                    CountriesScreen(viewModel)
+                    PartiesScreen(viewModel, countryName)
                 }
             }
         }
     }
 
-    private fun onCountrySelected(country: Country) {
+    private fun onPartySelected(party: Party) {
         findNavController()
                 .navigate(
-                        R.id.action_countriesFragment_to_partiesFragment,
-                        bundleOf(Pair(Const.COUNTRY_NAME_EXTRA, country.nameCountry))
+                        R.id.action_partiesFragment_to_partyDetailsFragment,
+                        bundleOf(Pair(Const.PARTY_ID_EXTRA, party.id))
                 )
     }
 }

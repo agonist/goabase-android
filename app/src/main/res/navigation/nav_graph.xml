@@ -7,5 +7,21 @@
     <fragment
         android:id="@+id/countriesFragment"
         android:name="com.onionsquare.goabase.feature.countries.CountriesFragment"
-        android:label="CountriesFragment" />
+        android:label="CountriesFragment" >
+        <action
+            android:id="@+id/action_countriesFragment_to_partiesFragment"
+            app:destination="@id/partiesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/partiesFragment"
+        android:name="com.onionsquare.goabase.feature.parties.PartiesFragment"
+        android:label="PartiesFragment" >
+        <action
+            android:id="@+id/action_partiesFragment_to_partyDetailsFragment"
+            app:destination="@id/partyDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/partyDetailsFragment"
+        android:name="com.onionsquare.goabase.feature.partydetails.PartyDetailsFragment"
+        android:label="PartyDetailsFragment" />
 </navigation>

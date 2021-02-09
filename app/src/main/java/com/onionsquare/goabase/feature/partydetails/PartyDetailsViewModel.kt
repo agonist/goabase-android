@@ -6,10 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onionsquare.goabase.domain.usecase.PartyUseCase
 import com.onionsquare.goabase.domain.usecase.State
-import com.onionsquare.goabase.feature.parties.PartiesActions
 import com.onionsquare.goabase.model.Party
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 class PartyDetailsViewModel(private val usecase: PartyUseCase) : ViewModel() {
 
