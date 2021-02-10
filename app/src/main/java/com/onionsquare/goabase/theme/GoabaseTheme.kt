@@ -38,6 +38,9 @@ val typography = Typography(
                 fontSize = 18.sp,
         ),
         subtitle1 = TextStyle(
+                color = AlienGreen,
+                fontWeight = FontWeight.W600,
+                fontSize = 18.sp
         ),
         subtitle2 = TextStyle(
         ),

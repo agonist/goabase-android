@@ -1,35 +1,56 @@
 package com.onionsquare.goabase.feature.parties
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.onionsquare.goabase.domain.usecase.PartiesUseCase
 import com.onionsquare.goabase.domain.usecase.State
-import com.onionsquare.goabase.feature.countries.CountriesScreenAction
-import com.onionsquare.goabase.model.Country
+import com.onionsquare.goabase.feature.partydetails.PartyDetailsActions
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.singleEventFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 
-class PartiesViewModel(private val usecase: PartiesUseCase) : ViewModel() {
+class PartiesViewModel(private val useCase: PartiesUseCase) : ViewModel() {
 
-    val parties: LiveData<PartiesScreenState> get() = _parties
-    private val _parties = MutableLiveData<PartiesScreenState>()
+    // STATE
 
-    fun fetchParties(country: String) {
-        usecase.listPartiesByCountry(country)
-                .onStart { _parties.value = PartiesScreenState.Loading }
-                .onEach { res ->
-                    _parties.value = when (res) {
-                        is State.Error -> PartiesScreenState.Error
-                        is State.Success -> PartiesScreenState.ListPartiesSuccess(res.data)
+    private val _country = MutableLiveData<String>()
+    private val _refresh = MutableLiveData<Boolean>()
+
+    private val country: LiveData<PartiesScreenState> = _country.distinctUntilChanged().switchMap { country ->
+        fetchParties(country)
+    }
+
+    private val refresh: LiveData<PartiesScreenState> = _refresh.switchMap {
+        fetchParties(_country.value!!)
+    }
+
+    val parties = MediatorLiveData<PartiesScreenState>().apply {
+        addSource(country) { state -> value = state }
+        addSource(refresh) { state -> value = state }
+    }
+
+    fun forceRefresh() {
+        _country.value?.let {
+            _refresh.value = true
+        }
+    }
+
+    fun setCountry(country: String) {
+        _country.value = country
+    }
+
+    private fun fetchParties(country: String): LiveData<PartiesScreenState> {
+        return liveData {
+            useCase.listPartiesByCountry(country)
+                    .onStart { emit(PartiesScreenState.Loading) }
+                    .collect { res ->
+                        emit(when (res) {
+                            is State.Error -> PartiesScreenState.Error
+                            is State.Success -> PartiesScreenState.ListPartiesSuccess(res.data)
+                        })
                     }
-                }
-                .launchIn(viewModelScope)
+        }
     }
 
     // USER ACTIONS
@@ -40,6 +61,10 @@ class PartiesViewModel(private val usecase: PartiesUseCase) : ViewModel() {
     fun onPartyClicked(party: Party) {
         _userActions.tryEmit(PartiesScreenActions.PartyClicked(party))
     }
+
+    fun navigateUp() {
+        _userActions.tryEmit(PartiesScreenActions.NavigateUp)
+    }
 }
 
 sealed class PartiesScreenState {
@@ -49,5 +74,6 @@ sealed class PartiesScreenState {
 }
 
 sealed class PartiesScreenActions {
-    data class PartyClicked(val party: Party): PartiesScreenActions()
+    data class PartyClicked(val party: Party) : PartiesScreenActions()
+    object NavigateUp : PartiesScreenActions()
 }

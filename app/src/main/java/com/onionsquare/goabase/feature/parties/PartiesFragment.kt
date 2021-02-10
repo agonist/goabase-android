@@ -19,7 +19,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class PartiesFragment : Fragment() {
 
     private val viewModel: PartiesViewModel by viewModel()
-
     private val countryName by extraNotNull<String>(Const.COUNTRY_NAME_EXTRA)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -30,7 +29,7 @@ class PartiesFragment : Fragment() {
             }
         }
 
-        viewModel.fetchParties(countryName)
+        viewModel.setCountry(countryName)
 
         return ComposeView(requireContext()).apply {
             setContent {

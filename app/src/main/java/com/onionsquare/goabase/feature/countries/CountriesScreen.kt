@@ -20,6 +20,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.asLiveData
 import com.heetch.countrypicker.Utils
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.CircularLoader
@@ -46,7 +47,7 @@ fun CountriesScreen(viewModel: CountriesViewModel) {
 @Composable
 fun BodyContent(countriesState: CountriesScreenState, onRetryClicked: () -> Unit, onCountryClicked: (Country) -> Unit) {
     when (countriesState) {
-        is CountriesScreenState.Loading -> CircularLoader()
+        is CountriesScreenState.Loading, CountriesScreenState.Init -> CircularLoader()
         is CountriesScreenState.ListCountriesSuccess -> CountryList(countriesState.countries, onCountryClicked)
         is CountriesScreenState.Error -> RetryView(message = "Impossible to get countries list for now", onRetryClicked = { onRetryClicked() })
     }

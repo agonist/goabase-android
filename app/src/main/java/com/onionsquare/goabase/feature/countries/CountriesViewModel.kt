@@ -8,17 +8,19 @@ import com.onionsquare.goabase.domain.usecase.CountriesUseCase
 import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Country
 import com.onionsquare.goabase.singleEventFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 
 class CountriesViewModel(private val usecase: CountriesUseCase) : ViewModel() {
 
     // STATE
 
     val countries: LiveData<CountriesScreenState> get() = _countries
-    private val _countries: MutableLiveData<CountriesScreenState> = MutableLiveData()
+    private val _countries: MutableLiveData<CountriesScreenState> = MutableLiveData(CountriesScreenState.Init)
+
+
+    init {
+        fetchCountries()
+    }
 
     fun fetchCountries(countriesParams: String = "list-all") {
         usecase.listAllCountriesSortedByPartiesAmount(countriesParams)
@@ -45,6 +47,7 @@ class CountriesViewModel(private val usecase: CountriesUseCase) : ViewModel() {
 }
 
 sealed class CountriesScreenState {
+    object Init : CountriesScreenState()
     object Loading : CountriesScreenState()
     object Error : CountriesScreenState()
     data class ListCountriesSuccess(val countries: List<Country>) : CountriesScreenState()

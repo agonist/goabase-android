@@ -10,6 +10,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.onionsquare.goabase.theme.Mustard
 import com.onionsquare.goabase.theme.PurpleDark
+import org.threeten.bp.OffsetDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 @Composable
 fun RetryView(
@@ -58,4 +61,12 @@ fun SimpleTitleToolbar(title: String) {
                 Text(text = title)
             }
     )
+}
+
+@Composable
+fun FormatedDateText(date: String) {
+    val date = OffsetDateTime.parse(date).toLocalDateTime()
+    val formatedDate = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(date)
+
+    Text(text = formatedDate)
 }

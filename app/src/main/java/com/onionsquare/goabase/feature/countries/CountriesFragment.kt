@@ -28,7 +28,6 @@ class CountriesFragment : Fragment() {
             }
         }
 
-        viewModel.fetchCountries()
         return ComposeView(requireContext()).apply {
             setContent {
                 GoabaseTheme {
@@ -37,7 +36,7 @@ class CountriesFragment : Fragment() {
             }
         }
     }
-
+    
     private fun onCountrySelected(country: Country) {
         findNavController()
                 .navigate(
