@@ -17,7 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.CircularLoader
-import com.onionsquare.goabase.feature.FormatedDateText
+import com.onionsquare.goabase.feature.FormattedDateText
 import com.onionsquare.goabase.feature.RetryView
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.theme.Mustard
@@ -76,9 +76,9 @@ fun PartyHeader(party: Party) {
             Icon(vectorResource(id = R.drawable.ic_baseline_calendar_today_24), contentDescription = null, tint = Mustard, modifier = Modifier
                     .height(20.dp)
                     .padding(end = 8.dp))
-            FormatedDateText(date = party.dateStart)
+            FormattedDateText(date = party.dateStart)
             Text(text = " - ")
-            FormatedDateText(date = party.dateEnd)
+            FormattedDateText(date = party.dateEnd)
         }
         Spacer(modifier = Modifier.height(8.dp))
         Row {

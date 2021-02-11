@@ -2,6 +2,8 @@
     <string name="app_name">Goabase</string>
 
     <string name="countries_title">Countries</string>
+    <string name="countries_error_message">Error while getting countries list</string>
+
     <string name="party_details">Details</string>
 
     <string name="party_details_line_up">Line up</string>

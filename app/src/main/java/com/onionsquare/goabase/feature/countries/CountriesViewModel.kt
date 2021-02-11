@@ -1,6 +1,5 @@
 package com.onionsquare.goabase.feature.countries
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,40 +7,33 @@ import com.onionsquare.goabase.domain.usecase.CountriesUseCase
 import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Country
 import com.onionsquare.goabase.singleEventFlow
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 
-class CountriesViewModel(private val usecase: CountriesUseCase) : ViewModel() {
+class CountriesViewModel(private val useCase: CountriesUseCase) : ViewModel() {
 
     // STATE
 
-    val countries: LiveData<CountriesScreenState> get() = _countries
-    private val _countries: MutableLiveData<CountriesScreenState> = MutableLiveData(CountriesScreenState.Init)
-
-
-    init {
-        fetchCountries()
-    }
+    val countries = MutableLiveData<CountriesScreenState>(CountriesScreenState.Init)
 
     fun fetchCountries(countriesParams: String = "list-all") {
-        usecase.listAllCountriesSortedByPartiesAmount(countriesParams)
-                .onStart { _countries.value = CountriesScreenState.Loading }
+        useCase.listAllCountriesSortedByPartiesAmount(countriesParams)
+                .onStart { countries.value = CountriesScreenState.Loading }
                 .onEach { res ->
-                    _countries.value =
-                            when (res) {
-                                is State.Error -> CountriesScreenState.Error
-                                is State.Success -> CountriesScreenState.ListCountriesSuccess(res.data)
-                            }
-                }
-                .launchIn(viewModelScope)
+                    countries.value = when (res) {
+                        is State.Error -> CountriesScreenState.Error
+                        is State.Success -> CountriesScreenState.ListCountriesSuccess(res.data)
+                    }
+                }.launchIn(viewModelScope)
     }
 
     // USER ACTIONS
 
-    val userAction: SharedFlow<CountriesScreenAction> get() = _userActions
-    private val _userActions = singleEventFlow<CountriesScreenAction>()
+    val userActions = singleEventFlow<CountriesScreenAction>()
 
     fun onCountryClicked(country: Country) {
-        _userActions.tryEmit(CountriesScreenAction.CountryClicked(country))
+        userActions.tryEmit(CountriesScreenAction.CountryClicked(country))
     }
 
 }
@@ -54,5 +46,5 @@ sealed class CountriesScreenState {
 }
 
 sealed class CountriesScreenAction {
-    data class CountryClicked(val country: Country): CountriesScreenAction()
+    data class CountryClicked(val country: Country) : CountriesScreenAction()
 }

@@ -64,9 +64,9 @@ fun SimpleTitleToolbar(title: String) {
 }
 
 @Composable
-fun FormatedDateText(date: String) {
+fun FormattedDateText(date: String) {
     val date = OffsetDateTime.parse(date).toLocalDateTime()
-    val formatedDate = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(date)
+    val formattedDate = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(date)
 
-    Text(text = formatedDate)
+    Text(text = formattedDate)
 }

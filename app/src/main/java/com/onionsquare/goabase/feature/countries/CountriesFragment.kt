@@ -22,11 +22,13 @@ class CountriesFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
-        viewModel.userAction.asLiveData().observe(viewLifecycleOwner) {
+        viewModel.userActions.asLiveData().observe(viewLifecycleOwner) {
             when (it) {
                 is CountriesScreenAction.CountryClicked -> onCountrySelected(it.country)
             }
         }
+
+        viewModel.fetchCountries()
 
         return ComposeView(requireContext()).apply {
             setContent {

@@ -13,7 +13,6 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -22,16 +21,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.CircularLoader
-import com.onionsquare.goabase.feature.FormatedDateText
+import com.onionsquare.goabase.feature.FormattedDateText
 import com.onionsquare.goabase.feature.RetryView
-import com.onionsquare.goabase.feature.SimpleTitleToolbar
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.theme.Mustard
 import dev.chrisbanes.accompanist.coil.CoilImage
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
-import org.threeten.bp.OffsetDateTime
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.FormatStyle
 
 
 @Composable
@@ -45,7 +39,7 @@ fun PartiesScreen(viewModel: PartiesViewModel, countryName: String) {
                 elevation = 0.dp,
                 contentColor = Mustard
         ) {
-            Row() {
+            Row {
                 IconButton(onClick = { viewModel.navigateUp() }) {
                     Icon(
                             imageVector = Icons.Rounded.ArrowBack,
@@ -94,7 +88,7 @@ fun PartyItem(party: Party, onPartyClicked: (Party) -> Unit) {
     ) {
         PartyPic(party = party)
         Column(modifier = Modifier.padding(start = 16.dp)) {
-            FormatedDateText(date = party.dateStart)
+            FormattedDateText(date = party.dateStart)
             Text(text = party.nameParty, style = MaterialTheme.typography.h5)
             Row {
                 Icon(vectorResource(id = R.drawable.ic_location_on_black_24dp), contentDescription = null, tint = Mustard, modifier = Modifier.height(20.dp))
