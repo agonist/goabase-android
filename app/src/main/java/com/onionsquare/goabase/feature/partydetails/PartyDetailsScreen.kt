@@ -91,9 +91,9 @@ fun PartyHeader(party: Party) {
 }
 
 @Composable
-fun DetailsComponent(sectionTitle: String, sectionContent: String) {
+fun DetailsComponent(sectionTitle: String, sectionContent: String?) {
     var content = sectionContent
-    if (sectionContent.isEmpty())
+    if (sectionContent.isNullOrEmpty())
         content = "Unknown"
 
     Column(Modifier.background(PurpleDark)) {
@@ -101,7 +101,7 @@ fun DetailsComponent(sectionTitle: String, sectionContent: String) {
                 .fillMaxWidth()
                 .background(PurpleLight)
                 .padding(start = 16.dp, top = 8.dp, bottom = 8.dp), style = MaterialTheme.typography.subtitle1)
-        Text(text = content, Modifier.padding(16.dp), style = MaterialTheme.typography.body1)
+        Text(text = content!!, Modifier.padding(16.dp), style = MaterialTheme.typography.body1)
     }
 }
 

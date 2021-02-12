@@ -1,46 +1,26 @@
 package com.onionsquare.goabase.model
 
-import android.graphics.drawable.Drawable
-import androidx.annotation.DrawableRes
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class Countries(
 
-        @SerializedName("countrylist")
+        @Json(name = "countrylist")
         val countries: List<Country>
 
 )
 
 data class Country(
 
-        @SerializedName("nameCountry")
+        @Json(name = "nameCountry")
         val nameCountry: String,
 
-        @SerializedName("isoCountry")
+        @Json(name = "isoCountry")
         val isoCountry: String,
 
-        @SerializedName("numParties")
+        @Json(name = "numParties")
         val numParties: String,
 
-        @SerializedName("urlCountry")
+        @Json(name = "urlCountry")
         val urlCountry: String
 
 )
-
-//data class CountryItem(
-//        @DrawableRes
-//        val res: Int,
-//
-//        @SerializedName("nameCountry")
-//        val nameCountry: String,
-//
-//        @SerializedName("isoCountry")
-//        val isoCountry: String,
-//
-//        @SerializedName("numParties")
-//        val numParties: String,
-//
-//        @SerializedName("urlCountry")
-//        val urlCountry: String
-//
-//)

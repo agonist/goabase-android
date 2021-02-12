@@ -1,93 +1,78 @@
 package com.onionsquare.goabase.model
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 import java.io.Serializable
 
 data class Parties(
-        @SerializedName("partylist")
+        @Json(name = "partylist")
         val parties: List<Party>
 )
 
 data class PartyDetails(
-        @SerializedName("party")
+        @Json(name = "party")
         val party: Party
 )
 
 data class Party(
 
-        @SerializedName("id")
+        @Json(name = "id")
         val id: String,
 
-        @SerializedName("nameParty")
+        @Json(name = "nameParty")
         val nameParty: String,
 
-        @SerializedName("dateStart")
+        @Json(name = "dateStart")
         val dateStart: String,
 
-        @SerializedName("dateEnd")
+        @Json(name = "dateEnd")
         val dateEnd: String,
 
-        @SerializedName("nameType")
+        @Json(name = "nameType")
         val nameType: String,
 
-        @SerializedName("nameCountry")
+        @Json(name = "nameCountry")
         val nameCountry: String,
 
-        @SerializedName("isoCountry")
+        @Json(name = "isoCountry")
         val isoCountry: String,
 
-        @SerializedName("nameTown")
+        @Json(name = "nameTown")
         val nameTown: String,
 
-        @SerializedName("geoLat")
+        @Json(name = "geoLat")
         val geoLat: String,
 
-        @SerializedName("geoLon")
+        @Json(name = "geoLon")
         val geoLon: String,
 
-        @SerializedName("nameOrganizer")
+        @Json(name = "nameOrganizer")
         val nameOrganizer: String,
 
-        @SerializedName("urlOrganizer")
+        @Json(name = "urlOrganizer")
         val urlOrganizer: String?,
 
-        @SerializedName("urlImageSmall")
+        @Json(name = "urlImageSmall")
         val urlImageSmall: String?,
 
-        @SerializedName("urlImageMedium")
+        @Json(name = "urlImageMedium")
         val urlImageMedium: String?,
 
-        @SerializedName("urlImageFull")
+        @Json(name = "urlImageFull")
         val urlImageFull: String?,
 
-        @SerializedName("dateCreated")
-        val dateCreated: String,
+        @Json(name = "textLineUp")
+        val textLineup: String?,
 
-        @SerializedName("dateModified")
-        val dateModified: String,
+        @Json(name = "textDeco")
+        val textDeco: String?,
 
-        @SerializedName("nameStatus")
-        val nameStatus: String,
+        @Json(name = "textLocation")
+        val textLocation: String?,
 
-        @SerializedName("urlPartyHtml")
-        val urlPartyHtml: String,
+        @Json(name = "textEntryFee")
+        val textEntryFee: String?,
 
-        @SerializedName("urlPartyJson")
-        val urlPartyJson: String,
-
-        @SerializedName("textLineUp")
-        val textLineup: String,
-
-        @SerializedName("textDeco")
-        val textDeco: String,
-
-        @SerializedName("textLocation")
-        val textLocation: String,
-
-        @SerializedName("textEntryFee")
-        val textEntryFee: String,
-
-        @SerializedName("textMore")
-        val textMore: String
+        @Json(name = "textMore")
+        val textMore: String?
 
 ) : Serializable
