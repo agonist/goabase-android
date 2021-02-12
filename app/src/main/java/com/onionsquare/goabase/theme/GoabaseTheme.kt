@@ -30,7 +30,7 @@ val typography = Typography(
         h5 = TextStyle(
                 color = AlienGreen,
                 fontWeight = FontWeight.W700,
-                fontSize = 20.sp
+                fontSize = 18.sp
         ),
         h6 = TextStyle(
                 color = Mustard,

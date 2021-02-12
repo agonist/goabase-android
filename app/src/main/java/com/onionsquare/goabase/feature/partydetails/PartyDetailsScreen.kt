@@ -34,7 +34,7 @@ fun PartyDetailsScreen(viewModel: PartyDetailsViewModel) {
     ProvideWindowInsets {
         Scaffold {
             Surface {
-                BodyContent(partyDetailsState!!, { viewModel.forceRefresh() }) { viewModel.navigateUp() }
+                BodyContent(partyDetailsState!!, { viewModel.fetchPartyDetails() }) { viewModel.navigateUp() }
             }
         }
     }

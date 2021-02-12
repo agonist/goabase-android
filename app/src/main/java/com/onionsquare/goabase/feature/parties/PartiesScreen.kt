@@ -16,6 +16,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -36,23 +37,22 @@ fun PartiesScreen(viewModel: PartiesViewModel, countryName: String) {
     Scaffold(topBar = {
         TopAppBar(
                 backgroundColor = MaterialTheme.colors.secondary,
+                title = {
+                    Text(text = AmbientContext.current.getString(R.string.parties_title, countryName))
+                },
                 elevation = 0.dp,
-                contentColor = Mustard
-        ) {
-            Row {
-                IconButton(onClick = { viewModel.navigateUp() }) {
+                contentColor = Mustard,
+                navigationIcon = { IconButton(onClick = { viewModel.navigateUp() }) {
                     Icon(
                             imageVector = Icons.Rounded.ArrowBack,
                             contentDescription = null
                     )
-                }
-                Text(text = "Parties in $countryName")
-            }
-        }
+                }}
+        )
 
     }) {
         Surface {
-            BodyContent(partiesState, { viewModel.forceRefresh() }, { party -> viewModel.onPartyClicked(party) })
+            BodyContent(partiesState, { viewModel.fetchParties() }, { party -> viewModel.onPartyClicked(party) })
         }
     }
 }
@@ -61,8 +61,8 @@ fun PartiesScreen(viewModel: PartiesViewModel, countryName: String) {
 @Composable
 fun BodyContent(partiesState: PartiesScreenState, onRetryClicked: () -> Unit, onPartyClicked: (Party) -> Unit) {
     when (partiesState) {
-        is PartiesScreenState.Loading -> CircularLoader()
-        is PartiesScreenState.Error -> RetryView(message = "Impossible to get parties for now", onRetryClicked = { onRetryClicked() })
+        is PartiesScreenState.Loading, PartiesScreenState.Init -> CircularLoader()
+        is PartiesScreenState.Error -> RetryView(message = AmbientContext.current.getString(R.string.parties_title), onRetryClicked = { onRetryClicked() })
         is PartiesScreenState.ListPartiesSuccess -> PartiesList(parties = partiesState.parties, onPartyClicked)
     }
 }
@@ -109,9 +109,9 @@ fun PartyPic(
     ) {
         party.urlImageMedium?.let {
             CoilImage(
-                    data = party.urlImageMedium, "", contentScale = ContentScale.Crop)
+                    data = party.urlImageMedium, null, contentScale = ContentScale.Crop)
         } ?: run {
-            Image(bitmap = imageResource(id = R.drawable.no_picture), contentDescription = "", contentScale = ContentScale.Crop, modifier = Modifier
+            Image(bitmap = imageResource(id = R.drawable.no_picture), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight())
         }

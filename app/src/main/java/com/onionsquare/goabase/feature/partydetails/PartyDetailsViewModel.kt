@@ -1,11 +1,14 @@
 package com.onionsquare.goabase.feature.partydetails
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.onionsquare.goabase.domain.usecase.PartyUseCase
 import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Party
 import com.onionsquare.goabase.singleEventFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 class PartyDetailsViewModel(private val useCase: PartyUseCase) : ViewModel() {
@@ -13,42 +16,24 @@ class PartyDetailsViewModel(private val useCase: PartyUseCase) : ViewModel() {
     // STATE
 
     private val _partyId = MutableLiveData<String>()
-    private val _refresh = MutableLiveData<Boolean>()
 
-    private val party: LiveData<PartyDetailsState> = _partyId.distinctUntilChanged().switchMap { partyId ->
-        fetchPartyDetails(partyId)
-    }
+    val partyDetails = MutableLiveData<PartyDetailsState>(PartyDetailsState.Init)
 
-    private val refresh: LiveData<PartyDetailsState> = _refresh.switchMap {
-        fetchPartyDetails(_partyId.value!!)
-    }
-
-    val partyDetails = MediatorLiveData<PartyDetailsState>().apply {
-        addSource(party) { state -> value = state }
-        addSource(refresh) { state -> value = state }
-    }
-
-    fun forceRefresh() {
-        _partyId.value?.let {
-            _refresh.value = true
-        }
-    }
-
-    fun setPartyId(partyId: String){
+    fun setPartyId(partyId: String) {
         _partyId.value = partyId
+        fetchPartyDetails()
     }
 
-    private fun fetchPartyDetails(partyId: String): LiveData<PartyDetailsState> =
-            liveData {
-                useCase.getPartyDetailsById(partyId)
-                        .onStart { emit(PartyDetailsState.Loading) }
-                        .collect { res ->
-                            emit(when (res) {
-                                is State.Error -> PartyDetailsState.Error
-                                is State.Success -> PartyDetailsState.GetPartyDetailsSuccess(res.data)
-                            })
-                        }
-            }
+    fun fetchPartyDetails() {
+        useCase.getPartyDetailsById(_partyId.value!!)
+                .onStart { partyDetails.value = PartyDetailsState.Loading }
+                .onEach { res ->
+                    partyDetails.value = when (res) {
+                        is State.Error -> PartyDetailsState.Error
+                        is State.Success -> PartyDetailsState.GetPartyDetailsSuccess(res.data)
+                    }
+                }.launchIn(viewModelScope)
+    }
 
 
     // USE ACTIONS
@@ -62,6 +47,7 @@ class PartyDetailsViewModel(private val useCase: PartyUseCase) : ViewModel() {
 }
 
 sealed class PartyDetailsState {
+    object Init : PartyDetailsState()
     object Loading : PartyDetailsState()
     object Error : PartyDetailsState()
     data class GetPartyDetailsSuccess(val party: Party) : PartyDetailsState()
