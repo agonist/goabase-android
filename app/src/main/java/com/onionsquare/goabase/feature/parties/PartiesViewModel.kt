@@ -2,9 +2,8 @@ package com.onionsquare.goabase.feature.parties
 
 import androidx.lifecycle.*
 import com.onionsquare.goabase.domain.usecase.PartiesUseCase
-import com.onionsquare.goabase.domain.usecase.State
-import com.onionsquare.goabase.feature.partydetails.PartyDetailsActions
 import com.onionsquare.goabase.model.Party
+import com.onionsquare.goabase.network.Resource
 import com.onionsquare.goabase.singleEventFlow
 import kotlinx.coroutines.flow.*
 
@@ -28,8 +27,8 @@ class PartiesViewModel(private val useCase: PartiesUseCase) : ViewModel() {
                 .onStart { parties.value = PartiesScreenState.Loading }
                 .onEach { res ->
                     parties.value = when (res) {
-                        is State.Error -> PartiesScreenState.Error
-                        is State.Success -> PartiesScreenState.ListPartiesSuccess(res.data)
+                        is Resource.Error -> PartiesScreenState.Error
+                        is Resource.Success -> PartiesScreenState.ListPartiesSuccess(res.data)
                     }
                 }.launchIn(viewModelScope)
     }

@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onionsquare.goabase.domain.usecase.CountriesUseCase
-import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Country
+import com.onionsquare.goabase.network.Resource
 import com.onionsquare.goabase.singleEventFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,8 +22,8 @@ class CountriesViewModel(private val useCase: CountriesUseCase) : ViewModel() {
                 .onStart { countries.value = CountriesScreenState.Loading }
                 .onEach { res ->
                     countries.value = when (res) {
-                        is State.Error -> CountriesScreenState.Error
-                        is State.Success -> CountriesScreenState.ListCountriesSuccess(res.data)
+                        is Resource.Error -> CountriesScreenState.Error
+                        is Resource.Success -> CountriesScreenState.ListCountriesSuccess(res.data)
                     }
                 }.launchIn(viewModelScope)
     }

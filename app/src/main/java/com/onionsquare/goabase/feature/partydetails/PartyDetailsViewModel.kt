@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onionsquare.goabase.domain.usecase.PartyUseCase
-import com.onionsquare.goabase.domain.usecase.State
 import com.onionsquare.goabase.model.Party
+import com.onionsquare.goabase.network.Resource
 import com.onionsquare.goabase.singleEventFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,8 +29,8 @@ class PartyDetailsViewModel(private val useCase: PartyUseCase) : ViewModel() {
                 .onStart { partyDetails.value = PartyDetailsState.Loading }
                 .onEach { res ->
                     partyDetails.value = when (res) {
-                        is State.Error -> PartyDetailsState.Error
-                        is State.Success -> PartyDetailsState.GetPartyDetailsSuccess(res.data)
+                        is Resource.Error -> PartyDetailsState.Error
+                        is Resource.Success -> PartyDetailsState.GetPartyDetailsSuccess(res.data)
                     }
                 }.launchIn(viewModelScope)
     }

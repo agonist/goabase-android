@@ -4,17 +4,6 @@ import android.app.Activity
 import android.view.View
 import androidx.fragment.app.Fragment
 
-fun View.visible() {
-    visibility = View.VISIBLE
-}
-
-fun View.gone() {
-    visibility = View.GONE
-}
-
-fun View.invisible() {
-    visibility = View.INVISIBLE
-}
 
 inline fun <reified T : Any> Activity.extra(key: String, default: T? = null) = lazy {
     val value = intent?.extras?.get(key)
