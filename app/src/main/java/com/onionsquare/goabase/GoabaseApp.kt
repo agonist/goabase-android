@@ -24,17 +24,17 @@ class GoabaseApp : Application() {
         setupKoin()
     }
 
-    val repositoryModule = module {
+    private val repositoryModule = module {
         single<GoabaseRepository> { GoabaseRemoteRepository(get()) }
     }
 
-    val domainModule = module {
+    private val domainModule = module {
         factory { CountriesUseCase(get()) }
         factory { PartiesUseCase(get()) }
         factory { PartyUseCase(get()) }
     }
 
-    val viewModelModule = module {
+    private val viewModelModule = module {
         viewModel { CountriesViewModel(get()) }
         viewModel { PartiesViewModel(get()) }
         viewModel { PartyDetailsViewModel(get()) }

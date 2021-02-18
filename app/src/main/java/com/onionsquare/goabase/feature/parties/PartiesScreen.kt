@@ -62,7 +62,7 @@ fun PartiesScreen(viewModel: PartiesViewModel, countryName: String) {
 fun BodyContent(partiesState: PartiesScreenState, onRetryClicked: () -> Unit, onPartyClicked: (Party) -> Unit) {
     when (partiesState) {
         is PartiesScreenState.Loading, PartiesScreenState.Init -> CircularLoader()
-        is PartiesScreenState.Error -> RetryView(message = AmbientContext.current.getString(R.string.parties_title), onRetryClicked = { onRetryClicked() })
+        is PartiesScreenState.Error -> RetryView(message = AmbientContext.current.getString(R.string.parties_error_message), onRetryClicked = { onRetryClicked() })
         is PartiesScreenState.ListPartiesSuccess -> PartiesList(parties = partiesState.parties, onPartyClicked)
     }
 }

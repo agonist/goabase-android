@@ -10,6 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.onionsquare.goabase.theme.Mustard
 import com.onionsquare.goabase.theme.PurpleDark
+import com.onionsquare.goabase.theme.PurpleLight
 import org.threeten.bp.OffsetDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -21,7 +22,7 @@ fun RetryView(
         onRetryClicked: () -> Unit
 ) {
     Column(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize().background(PurpleDark),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
     ) {
@@ -34,7 +35,7 @@ fun RetryView(
                 )
         )
 
-        Button(onClick = { onRetryClicked() }) {
+        Button(onClick = { onRetryClicked() }, colors = ButtonDefaults.buttonColors(PurpleLight)) {
             Text(text = "retry")
         }
     }

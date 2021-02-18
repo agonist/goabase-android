@@ -1,5 +1,10 @@
 package com.onionsquare.goabase.feature.partydetails
 
+import android.content.Intent
+import android.net.Uri
+import android.text.SpannableString
+import android.text.style.ClickableSpan
+import android.view.View
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -8,13 +13,25 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.gesture.tapGestureFilter
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientContext
+import androidx.compose.ui.platform.AmbientUriHandler
+import androidx.compose.ui.platform.UriHandlerAmbient
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.annotatedString
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.onionsquare.goabase.R
 import com.onionsquare.goabase.feature.CircularLoader
 import com.onionsquare.goabase.feature.FormattedDateText
@@ -26,6 +43,7 @@ import com.onionsquare.goabase.theme.PurpleLight
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
+import java.util.regex.Pattern
 
 @Composable
 fun PartyDetailsScreen(viewModel: PartyDetailsViewModel) {
@@ -101,7 +119,7 @@ fun DetailsComponent(sectionTitle: String, sectionContent: String?) {
                 .fillMaxWidth()
                 .background(PurpleLight)
                 .padding(start = 16.dp, top = 8.dp, bottom = 8.dp), style = MaterialTheme.typography.subtitle1)
-        Text(text = content!!, Modifier.padding(16.dp), style = MaterialTheme.typography.body1)
+        LinkifyText(text = content!!, Modifier.padding(16.dp))
     }
 }
 
@@ -166,4 +184,77 @@ fun NetworkImage(
                 }
         )
 }
+
+@Composable
+fun LinkifyText(text: String, modifier: Modifier = Modifier) {
+    val uriHandler = AmbientUriHandler.current
+    val layoutResult = remember {
+        mutableStateOf<TextLayoutResult?>(null)
+    }
+    val linksList = extractUrls(text)
+    val annotatedString = buildAnnotatedString {
+        append(text)
+        linksList.forEach {
+            addStyle(
+                    style = SpanStyle(
+                            color = Color.Companion.Blue,
+                            textDecoration = TextDecoration.Underline
+                    ),
+                    start = it.start,
+                    end = it.end
+            )
+            addStringAnnotation(
+                    tag = "URL",
+                    annotation = it.url,
+                    start = it.start,
+                    end = it.end
+            )
+        }
+    }
+    Text(text = annotatedString, style = MaterialTheme.typography.body1, modifier = modifier.tapGestureFilter { offsetPosition ->
+        layoutResult.value?.let {
+            val position = it.getOffsetForPosition(offsetPosition)
+            annotatedString.getStringAnnotations(position, position).firstOrNull()
+                    ?.let { result ->
+                        if (result.tag == "URL") {
+                            uriHandler.openUri(result.item)
+                        }
+                    }
+        }
+    },
+            onTextLayout = { layoutResult.value = it }
+    )
+}
+
+private val urlPattern: Pattern = Pattern.compile(
+        "(?:^|[\\W])((ht|f)tp(s?):\\/\\/|www\\.)"
+                + "(([\\w\\-]+\\.){1,}?([\\w\\-.~]+\\/?)*"
+                + "[\\p{Alnum}.,%_=?&#\\-+()\\[\\]\\*$~@!:/{};']*)",
+        Pattern.CASE_INSENSITIVE or Pattern.MULTILINE or Pattern.DOTALL
+)
+
+fun extractUrls(text: String): List<LinkInfos> {
+    val matcher = urlPattern.matcher(text)
+    var matchStart: Int
+    var matchEnd: Int
+    val links = arrayListOf<LinkInfos>()
+
+    while (matcher.find()) {
+        matchStart = matcher.start(1)
+        matchEnd = matcher.end()
+
+        var url = text.substring(matchStart, matchEnd)
+        if (!url.startsWith("http://") && !url.startsWith("https://"))
+            url = "https://$url"
+
+        links.add(LinkInfos(url, matchStart, matchEnd))
+    }
+    return links
+}
+
+data class LinkInfos(
+        val url: String,
+        val start: Int,
+        val end: Int
+)
 

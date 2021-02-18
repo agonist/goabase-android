@@ -1,21 +1,22 @@
 package com.onionsquare.goabase
 
+import com.onionsquare.goabase.network.Resource
 import retrofit2.Response
 
 abstract class BaseRepository {
 
-    protected suspend fun <T : Any> apiCall(call: suspend () -> Response<T>): Result<T> {
+    protected suspend fun <T : Any> apiCall(call: suspend () -> Response<T>): Resource<T> {
         val response: Response<T>
         try {
             response = call.invoke()
         } catch (t: Throwable) {
-            return Result.Error(ErrorType.UNKNOWN)
+            return Resource.Error(ErrorType.UNKNOWN.toString())
         }
 
         if (!response.isSuccessful) {
-            return Result.Error(ErrorType.UNKNOWN)
+            return Resource.Error(ErrorType.UNKNOWN.toString())
         }
-        return Result.Success(response.body()!!)
+        return Resource.Success(response.body()!!)
     }
 
 

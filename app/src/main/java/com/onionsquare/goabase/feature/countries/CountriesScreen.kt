@@ -110,15 +110,3 @@ fun CountryItem(country: Country, onCountryClicked: (Country) -> Unit) {
                 text = AmbientContext.current.resources.getQuantityString(R.plurals.numberOfParties, country.numParties.toInt(), country.numParties.toInt()))
     }
 }
-
-@Composable
-@Preview
-fun CountryListPreview() {
-    GoabaseTheme {
-        CountryList(countries = arrayListOf(
-                Country("France", "fr", "10", "xxx"),
-                Country("Germany", "de", "5", "xxx"),
-        )) {}
-    }
-
-}

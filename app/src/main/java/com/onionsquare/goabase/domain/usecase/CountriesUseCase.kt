@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.map
 
 class CountriesUseCase(private val remoteRepository: GoabaseRepository) {
 
-
     fun listAllCountriesSortedByPartiesAmount(params: String): Flow<Resource<List<Country>>> {
         return remoteRepository.getCountries(params)
                 .map { res ->

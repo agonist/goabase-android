@@ -40,10 +40,10 @@ data class Party(
         val nameTown: String,
 
         @Json(name = "geoLat")
-        val geoLat: String,
+        val geoLat: String?,
 
         @Json(name = "geoLon")
-        val geoLon: String,
+        val geoLon: String?,
 
         @Json(name = "nameOrganizer")
         val nameOrganizer: String,
