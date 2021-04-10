@@ -221,9 +221,7 @@ fun LinkifyText(text: String, modifier: Modifier = Modifier) {
                         }
                     }
         }
-    },
-            onTextLayout = { layoutResult.value = it }
-    )
+    }, onTextLayout = { layoutResult.value = it })
 }
 
 private val urlPattern: Pattern = Pattern.compile(
@@ -235,13 +233,11 @@ private val urlPattern: Pattern = Pattern.compile(
 
 fun extractUrls(text: String): List<LinkInfos> {
     val matcher = urlPattern.matcher(text)
-    var matchStart: Int
-    var matchEnd: Int
     val links = arrayListOf<LinkInfos>()
 
     while (matcher.find()) {
-        matchStart = matcher.start(1)
-        matchEnd = matcher.end()
+        val matchStart = matcher.start(1)
+        val matchEnd = matcher.end()
 
         var url = text.substring(matchStart, matchEnd)
         if (!url.startsWith("http://") && !url.startsWith("https://"))
